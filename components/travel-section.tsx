@@ -7,7 +7,7 @@ const travelUpdates = [
   {
     location: "Antigua, Guatemala",
     date: "June 2025",
-    image: "/antigua.jpg",
+    image: "/antigua.jpeg",
     description:
       "Antigua, Guatemala is a beautiful city with a lot of history and culture. ",
     highlights: ["Antigua", "Local coworking spaces", "Traditional markets"],
@@ -15,7 +15,7 @@ const travelUpdates = [
   {
     location: "Medellin, Colombia",
     date: "August 2025",
-    image: "/medellin.jpg",
+    image: "/medellin.jpeg",
     description:
       "Medellin, Colombia is a very large city, can spend a lot of time exploring the city and the surrounding area.",
     highlights: ["Medellin", "Comuna 13", "Traditional markets"],

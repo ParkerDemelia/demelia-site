@@ -7,21 +7,17 @@ const techStack = [
     category: "Development",
     items: [
       {
-        name: 'MacBook Pro 16"',
-        description: "M3 Max for heavy development work",
-        link: "https://amazon.com/macbook-pro",
+        name: 'M4 MacBook Air 13"',
+        description: "M4 and slim design",
+        link: "https://amzn.to/3JUYuix",
       },
       {
-        name: "LG UltraWide Monitor",
-        description: '34" curved display for productivity',
-        link: "https://amazon.com/lg-ultrawide",
+        name: "iPhone 16 Pro",
+        description: 'Great camera and battery life',
+        link: "https://amzn.to/3VhfTnY",
       },
-      { name: "Keychron K8", description: "Wireless mechanical keyboard", link: "https://amazon.com/keychron-k8" },
-      {
-        name: "Logitech MX Master 3",
-        description: "Precision mouse for design work",
-        link: "https://amazon.com/mx-master-3",
-      },
+      { name: "Crutial 2TB SSD", description: "Fast and reliable storage", link: "https://amzn.to/42suMre" },
+      ,
     ],
   },
   {
@@ -42,11 +38,7 @@ const techStack = [
         description: "Noise-canceling headphones for flights",
         link: "https://amazon.com/sony-wh1000xm5",
       },
-      {
-        name: "Roost Laptop Stand",
-        description: "Portable ergonomic laptop stand",
-        link: "https://amazon.com/roost-stand",
-      },
+      ,
     ],
   },
 ]
