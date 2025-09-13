@@ -92,11 +92,7 @@ export function PodcastSection() {
                   Listen on Spotify <ExternalLink className="ml-2 h-4 w-4" />
                 </a>
               </Button>
-              <Button variant="outline" asChild>
-                <a href="/api/rss/podcast" target="_blank" rel="noopener noreferrer">
-                  RSS Feed
-                </a>
-              </Button>
+              
             </div>
           </CardContent>
         </Card>

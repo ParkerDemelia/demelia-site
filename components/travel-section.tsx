@@ -5,29 +5,29 @@ import { MapPin, Calendar, ExternalLink } from "lucide-react"
 // Mock travel updates
 const travelUpdates = [
   {
-    location: "Bali, Indonesia",
-    date: "January 2024",
-    image: "/bali-rice-terraces-tropical-landscape.jpg",
+    location: "Antigua, Guatemala",
+    date: "June 2025",
+    image: "/antigua.jpg",
     description:
-      "Working remotely from the cultural heart of Indonesia. The rice terraces of Ubud provide the perfect backdrop for deep work sessions.",
-    highlights: ["Ubud rice terraces", "Local coworking spaces", "Traditional markets"],
+      "Antigua, Guatemala is a beautiful city with a lot of history and culture. ",
+    highlights: ["Antigua", "Local coworking spaces", "Traditional markets"],
   },
   {
-    location: "Lisbon, Portugal",
-    date: "December 2023",
-    image: "/lisbon-portugal-colorful-buildings-tram.jpg",
+    location: "Medellin, Colombia",
+    date: "August 2025",
+    image: "/medellin.jpg",
     description:
-      "Exploring Europe's tech hub while enjoying perfect weather and incredible food. The startup scene here is thriving.",
-    highlights: ["Pastéis de nata", "Tram 28 tour", "LX Factory visits"],
+      "Medellin, Colombia is a very large city, can spend a lot of time exploring the city and the surrounding area.",
+    highlights: ["Medellin", "Comuna 13", "Traditional markets"],
   },
-  {
+  /* {
     location: "Tokyo, Japan",
     date: "November 2023",
     image: "/tokyo-japan-neon-lights-city-night.jpg",
     description:
       "Immersing in the intersection of tradition and technology. Tokyo's efficiency and innovation continue to inspire.",
     highlights: ["Shibuya crossing", "Tech district tours", "Traditional temples"],
-  },
+  } */,
 ]
 
 export function TravelSection() {
@@ -82,7 +82,7 @@ export function TravelSection() {
 
       <div className="text-center">
         <Button variant="outline" asChild>
-          <a href="https://instagram.com/parkerdemelia" target="_blank" rel="noopener noreferrer">
+          <a href="https://instagram.com/parker.demelia" target="_blank" rel="noopener noreferrer">
             Follow My Journey <ExternalLink className="ml-2 h-4 w-4" />
           </a>
         </Button>
