@@ -3,7 +3,7 @@ import { NextResponse } from "next/server"
 export async function GET() {
   try {
     // You'll need to replace this with your actual Substack username
-    const substackUsername = process.env.SUBSTACK_USERNAME || "parkerdemelia"
+    const substackUsername = process.env.SUBSTACK_USERNAME || "demelia"
     const rssUrl = `https://${substackUsername}.substack.com/feed`
 
     console.log("[v0] Attempting to fetch Substack RSS from:", rssUrl)
@@ -73,7 +73,7 @@ function parseRSSFeed(rssText: string) {
     const itemRegex = /<item>(.*?)<\/item>/gs
     const items = rssText.match(itemRegex) || []
 
-    items.slice(0, 6).forEach((item) => {
+    items.slice(0, 8).forEach((item) => {
       const titleMatch = item.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/) || item.match(/<title>(.*?)<\/title>/)
       const linkMatch = item.match(/<link>(.*?)<\/link>/)
       const descMatch =

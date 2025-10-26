@@ -8,7 +8,7 @@ export function Header() {
         <div className="text-center space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">PARKER DEMELIA</h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-balance">
-            Exploring tech, travel, and everything in between
+            I'm a cs grad looking to create something cool while i travel the world. 
           </p>
 
           {/* Social Media Icons */}

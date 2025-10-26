@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   title: "Parker Demelia",
   description: "Blog, podcast, travel updates, and tech projects by Parker Demelia",
   generator: "v0.app",
+  icons: {
+    icon: "/logo.svg",
+  },
 }
 
 export default function RootLayout({

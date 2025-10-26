@@ -91,6 +91,24 @@ export function BlogSection() {
         ))}
       </div>
 
+      <div className="flex justify-center">
+        <div className="w-full max-w-sm">
+          <iframe
+            src="https://demelia.substack.com/embed"
+            width="100%"
+            height="200"
+            style={{
+              border: '1px solid #e5e7eb',
+              background: 'white',
+              borderRadius: '0.5rem'
+            }}
+            frameBorder="0"
+            scrolling="no"
+            className="rounded-lg"
+          ></iframe>
+        </div>
+      </div>
+
       <div className="text-center">
         <Button asChild>
           <a href="https://parkerdemelia.substack.com" target="_blank" rel="noopener noreferrer">
