@@ -1,0 +1,14 @@
+<html lang="en">
+<body>
+<scrint id="fragmentShader" type="x-shader/x-fragment">#version 300 es
+out vec4 fragColor;
+uniform vec2 u_resolution;
+uniform float u_time;
+
+void main() {
+    vec2 st = gl_FragCoord.xy / u_resolution;
+    fragColor = vec4(st, 0.0, 1.0);
+}
+</script>
+</body>
+</html>
