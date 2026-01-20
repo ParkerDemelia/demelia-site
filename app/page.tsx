@@ -12,9 +12,13 @@ export default function HomePage() {
   ]
 
   const gear = [
+    
     { name: "cotopaxi alipa 28L", url: "https://amzn.to/49UnBvc" },
+    { name: "altra lone peak 9+", url: "https://amzn.to/3ZrA2te" },
+    { name: "eddie bauer cloud cap", url: "https://amzn.to/4r1xvBV" },
     { name: "dji osmo pocket 3", url: "https://amzn.to/45fO98E" },
-    { name: "altra lone peak 9+", url: "https://amzn.to/3ZrA2te" }
+    /*{ name: "m4 macbook air 13\"", url: "https://amzn.to/4qBMHG8" },*/
+    /*{ name: "crucial 2TB ssd", url: "https://amzn.to/3YRO4Er" },*/
   ]
   return (
     <div className="min-h-screen bg-background">
