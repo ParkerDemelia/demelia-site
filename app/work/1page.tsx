@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Mail, Instagram, Github, Youtube, Rss } from "lucide-react"
 import { LinkedBlog } from "@/components/linked-blog"
 
-export default function HomePage() {
+export default function WorkPage() {
   const socialLinks = [
     { name: "instagram", url: "https://instagram.com/parker.demelia" },
     { name: "youtube", url: "https://youtube.com/@parker.demelia" },
@@ -11,15 +11,6 @@ export default function HomePage() {
     { name: "email", url: "mailto:parker.demelia@gmail.com" }
   ]
 
-  const gear = [
-    
-    { name: "cotopaxi alipa 28L", url: "https://amzn.to/49UnBvc" },
-    { name: "altra lone peak 9+", url: "https://amzn.to/3ZrA2te" },
-    { name: "eddie bauer cloud cap", url: "https://amzn.to/4r1xvBV" },
-    { name: "dji osmo pocket 3", url: "https://amzn.to/45fO98E" },
-    /*{ name: "m4 macbook air 13\"", url: "https://amzn.to/4qBMHG8" },*/
-    /*{ name: "crucial 2TB ssd", url: "https://amzn.to/3YRO4Er" },*/
-  ]
   return (
     <div className="min-h-screen bg-background">
       
@@ -36,7 +27,6 @@ export default function HomePage() {
           
 Life is waiting for you on the other side of decision.<br/>
 Take the leap and go after it.       </p>
-
           {/* Social Media Icons */}
           {/*
           <div className="flex justify-center items-center gap-4 pt-2">
@@ -95,50 +85,6 @@ Take the leap and go after it.       </p>
 
   {/* <LinkedBlog /> */}
 
-<p className="text-center text-sm text-muted-foreground">
-
-
-
-  youtube video:{" "}
-  <a
-    href="https://www.youtube.com/watch?v=H2q33HVW5ck"
-    className="text-primary font-semibold underline hover:brightness-125"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    
-to take the first steps
-<br/>
-  </a>
-
-
-  latest blog post:{" "}
-  <a
-    href="https://open.substack.com/pub/demelia/p/dos-extranos?r=1ztyoa&utm_campaign=post&utm_medium=web"
-    className="text-primary font-semibold underline hover:brightness-125"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    dos extranos
-  </a>
-
-
-  {/*
-  podcast episode:{" "}
-  <a
-    href="https://open.substack.com/pub/demelia/p/dos-extranos?r=1ztyoa&utm_campaign=post&utm_medium=web"
-    className="text-primary font-semibold underline hover:brightness-125"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    dos extranos
-  </a>
-  <br/>
-  <br/>
-  */}
-  
-  
-</p>
 
   {/* Socials Section */}
   <section className="space-y-4 text-center">
@@ -156,28 +102,6 @@ to take the first steps
                 </a>
               </div>
             ))}
-          </div>
-        </section>
-
-        {/* Gear Section */}
-        <section className="space-y-4 text-center">
-          <h2 className="text-2xl font-bold text-foreground">gear</h2>
-          <div className="space-y-2">
-            {gear.map((item) => (
-              <div key={item.name}>
-                <a
-                  href={item.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline"
-                >
-                  [ {item.name} ]
-                </a>
-              </div>
-            ))}
-          </div>
-          <div className="text-xs text-muted-foreground">
-            links may contain affiliate codes
           </div>
         </section>
 
