@@ -13,11 +13,11 @@ export default function HomePage() {
 
   const gear = [
     
-    { name: "cotopaxi alipa 28L", url: "https://amzn.to/49UnBvc" },
+    { name: "cotopaxi allpa 28L", url: "https://amzn.to/49UnBvc" },
     { name: "altra lone peak 9+", url: "https://amzn.to/3ZrA2te" },
     { name: "eddie bauer cloud cap", url: "https://amzn.to/4r1xvBV" },
     { name: "dji osmo pocket 3", url: "https://amzn.to/45fO98E" },
-    /*{ name: "m4 macbook air 13\"", url: "https://amzn.to/4qBMHG8" },*/
+    /*{ name: "m4 macbook air 13", url: "https://amzn.to/4qBMHG8" },*/
     /*{ name: "crucial 2TB ssd", url: "https://amzn.to/3YRO4Er" },*/
   ]
   return (
@@ -34,8 +34,7 @@ export default function HomePage() {
           <h1 className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">PARKER DEMELIA</h1>
           <p className="text-md text-muted-foreground max-w-2xl mx-auto text-balance">
           
-Life is waiting for you on the other side of decision.<br/>
-Take the leap and go after it.       </p>
+It's actually really easy.<br/>   </p>
 
           {/* Social Media Icons */}
           {/*
