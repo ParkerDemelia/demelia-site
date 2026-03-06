@@ -34,7 +34,7 @@ export default function HomePage() {
           <h1 className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">PARKER DEMELIA</h1>
           <p className="text-md text-muted-foreground max-w-2xl mx-auto text-balance">
           
-It's actually really easy.<br/>   </p>
+gonna hike a volcano soon. <br/>   </p>
 
           {/* Social Media Icons */}
           {/*
@@ -113,12 +113,12 @@ to take the first steps
 
   latest blog post:{" "}
   <a
-    href="https://open.substack.com/pub/demelia/p/dos-extranos?r=1ztyoa&utm_campaign=post&utm_medium=web"
+    href="https://substack.com/home/post/p-188514794"
     className="text-primary font-semibold underline hover:brightness-125"
     target="_blank"
     rel="noopener noreferrer"
   >
-    dos extranos
+    mesa por uno
   </a>
 
 
