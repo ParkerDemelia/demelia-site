@@ -120,6 +120,15 @@ to take the first steps
   >
     mesa por uno
   </a>
+<br/>
+
+  trip expenses:{" "}
+  <a
+    href="/trip-expenses"
+    className="text-primary font-semibold underline hover:brightness-125"
+  >
+    view all
+  </a>
 
 
   {/*
