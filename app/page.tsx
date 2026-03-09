@@ -34,7 +34,7 @@ export default function HomePage() {
           <h1 className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">PARKER DEMELIA</h1>
           <p className="text-md text-muted-foreground max-w-2xl mx-auto text-balance">
           
-gonna hike a volcano soon. <br/>   </p>
+hiked a volcano. video soon. <br/>   </p>
 
           {/* Social Media Icons */}
           {/*
