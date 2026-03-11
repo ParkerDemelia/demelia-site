@@ -1,16 +1,15 @@
 "use client"
 
-import { useEffect, useState, useMemo } from "react"
+import { useState, useMemo } from "react"
 import Link from "next/link"
-
-interface Expense {
-  id: string
-  expense: string
-  date: string
-  category: string
-  amount: number
-  location: string
-}
+import {
+  type Expense,
+  CATEGORY_COLORS,
+  useExpenses,
+  formatDate,
+  formatDateFull,
+  formatAmount,
+} from "@/components/trip-expenses-widget"
 
 type SortKey = "expense" | "date" | "category" | "amount" | "location"
 type SortDirection = "ascending" | "descending"
@@ -23,16 +22,12 @@ const COLUMNS: { key: SortKey; label: string }[] = [
   { key: "location", label: "Location" },
 ]
 
-const CATEGORY_COLORS = [
-  "oklch(0.75 0.18 195)",
-  "oklch(0.70 0.15 250)",
-  "oklch(0.72 0.16 150)",
-  "oklch(0.68 0.14 310)",
-  "oklch(0.74 0.12 80)",
-  "oklch(0.65 0.13 30)",
-  "oklch(0.60 0.10 200)",
-  "oklch(0.55 0.08 270)",
-]
+const COUNTRY_DATES: Record<string, { start: string; end: string }> = {
+  "Colombia":   { start: "Feb 2",  end: "Mar 2" },
+  "Guatemala":  { start: "Mar 2",  end: "Present" },
+}
+
+const CURRENT_LOCATION = "Antigua, Guatemala"
 
 function compareValues(a: Expense, b: Expense, key: SortKey, dir: SortDirection): number {
   let cmp = 0
@@ -85,35 +80,20 @@ function DonutChart({ data, total, colors, onClickSegment, activeSegment }: {
   )
 }
 
-const COUNTRY_DATES: Record<string, { start: string; end: string }> = {
-  "Colombia":   { start: "Feb 2",  end: "Mar 2" },
-  "Guatemala":  { start: "Mar 2",  end: "Present" },
+function ExpenseDateCell({ date, dateEnd }: { date: string; dateEnd: string }) {
+  if (!date) return <span>—</span>
+  if (dateEnd) {
+    return <span>{formatDate(date)} – {formatDate(dateEnd)}</span>
+  }
+  return <span>{formatDate(date)}</span>
 }
 
 export default function TripExpensesPage() {
-  const [allExpenses, setAllExpenses] = useState<Expense[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const { allExpenses, loading, error, overviewStats, categoryColorMap } = useExpenses()
   const [sortKey, setSortKey] = useState<SortKey>("date")
   const [sortDirection, setSortDirection] = useState<SortDirection>("descending")
   const [selectedLocations, setSelectedLocations] = useState<Set<string>>(new Set())
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set())
-
-  useEffect(() => {
-    async function load() {
-      try {
-        const res = await fetch("/api/notion/expenses")
-        if (!res.ok) throw new Error("Failed to fetch expenses")
-        const data = await res.json()
-        setAllExpenses(data.expenses)
-      } catch (err: any) {
-        setError(err.message)
-      } finally {
-        setLoading(false)
-      }
-    }
-    load()
-  }, [])
 
   const locations = useMemo(() => {
     const set = new Set<string>()
@@ -137,28 +117,6 @@ export default function TripExpensesPage() {
     }
     return [...items].sort((a, b) => compareValues(a, b, sortKey, sortDirection))
   }, [allExpenses, selectedLocations, selectedCategories, sortKey, sortDirection])
-
-  const overviewStats = useMemo(() => {
-    const dates = allExpenses.map(e => e.date).filter(Boolean).sort()
-    const totalAll = allExpenses.reduce((s, e) => s + (e.amount || 0), 0)
-    const byCountry: Record<string, number> = {}
-    allExpenses.forEach(e => {
-      const loc = e.location || "Unknown"
-      byCountry[loc] = (byCountry[loc] || 0) + (e.amount || 0)
-    })
-    const byCategory: Record<string, number> = {}
-    allExpenses.forEach(e => {
-      const cat = e.category || "Other"
-      byCategory[cat] = (byCategory[cat] || 0) + (e.amount || 0)
-    })
-    return {
-      total: totalAll,
-      startDate: dates[0] || "",
-      endDate: dates[dates.length - 1] || "",
-      byCountry: Object.entries(byCountry).sort((a, b) => b[1] - a[1]),
-      byCategory: Object.entries(byCategory).sort((a, b) => b[1] - a[1]),
-    }
-  }, [allExpenses])
 
   const filteredTotal = useMemo(() =>
     filtered.reduce((s, e) => s + (e.amount || 0), 0)
@@ -196,19 +154,24 @@ export default function TripExpensesPage() {
     return sortDirection === "ascending" ? " ↑" : " ↓"
   }
 
-  function formatDate(dateStr: string) {
-    if (!dateStr) return "—"
-    const d = new Date(dateStr + "T00:00:00")
-    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-  }
-
-  function formatAmount(amount: number) {
-    if (amount == null) return "—"
-    return `$${amount.toFixed(2)}`
-  }
-
   const showingFiltered = selectedLocations.size > 0 || selectedCategories.size > 0
   const activeCategory = selectedCategories.size === 1 ? Array.from(selectedCategories)[0] : null
+
+  function CategoryTag({ category }: { category: string }) {
+    const color = categoryColorMap[category] || "oklch(0.6 0.1 200)"
+    return (
+      <span
+        className="inline-block px-2 py-0.5 rounded-full text-xs border"
+        style={{
+          color,
+          backgroundColor: `color-mix(in oklch, ${color} 15%, transparent)`,
+          borderColor: `color-mix(in oklch, ${color} 30%, transparent)`,
+        }}
+      >
+        {category}
+      </span>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -246,7 +209,6 @@ export default function TripExpensesPage() {
             {/* Overview */}
             <div className="border border-border rounded-lg px-4 py-3 mb-4 bg-muted/5">
               <div className="flex items-start gap-4">
-                {/* Total + country */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-baseline gap-3 mb-0.5">
                     <span className="text-2xl font-bold text-foreground font-mono tabular-nums">
@@ -254,7 +216,7 @@ export default function TripExpensesPage() {
                     </span>
                     {overviewStats.startDate && (
                       <span className="text-[10px] text-muted-foreground whitespace-nowrap">
-                        {formatDate(overviewStats.startDate)} — {formatDate(overviewStats.endDate)}
+                        {formatDateFull(overviewStats.startDate)} — {formatDateFull(overviewStats.endDate)}
                       </span>
                     )}
                   </div>
@@ -288,19 +250,16 @@ export default function TripExpensesPage() {
                     <span className="relative flex h-2.5 w-2.5 shrink-0">
                       <span
                         className="absolute inline-flex h-full w-full rounded-full bg-red-500"
-                        style={{
-                          animation: "pulse-ring 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-                        }}
+                        style={{ animation: "pulse-ring 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite" }}
                       />
                       <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500" />
                     </span>
                     <span className="text-[11px] text-muted-foreground">
-                      currently in <span className="text-foreground font-medium">Antigua, Guatemala</span>
+                      currently in <span className="text-foreground font-medium">{CURRENT_LOCATION}</span>
                     </span>
                   </div>
                 </div>
 
-                {/* Category donut + legend */}
                 <div className="flex items-center gap-3 shrink-0">
                   <div className="w-20 h-20 md:w-24 md:h-24">
                     <DonutChart
@@ -312,7 +271,7 @@ export default function TripExpensesPage() {
                     />
                   </div>
                   <div className="space-y-0 hidden sm:block">
-                    {overviewStats.byCategory.map(([cat, amount], i) => {
+                    {overviewStats.byCategory.map(([cat, amount]) => {
                       const active = selectedCategories.has(cat)
                       return (
                         <button
@@ -324,7 +283,7 @@ export default function TripExpensesPage() {
                         >
                           <span
                             className="w-2 h-2 rounded-full shrink-0"
-                            style={{ backgroundColor: CATEGORY_COLORS[i % CATEGORY_COLORS.length] }}
+                            style={{ backgroundColor: categoryColorMap[cat] }}
                           />
                           <span className="text-[11px] text-muted-foreground w-24 truncate hover:text-foreground transition-colors">{cat}</span>
                           <span className="font-mono tabular-nums text-[11px] text-foreground w-14 text-right">{formatAmount(amount)}</span>
@@ -411,13 +370,11 @@ export default function TripExpensesPage() {
                       }`}
                     >
                       <td className="px-4 py-2 font-medium text-foreground text-sm">{exp.expense || "—"}</td>
-                      <td className="px-4 py-2 text-muted-foreground whitespace-nowrap text-sm">{formatDate(exp.date)}</td>
+                      <td className="px-4 py-2 text-muted-foreground whitespace-nowrap text-sm">
+                        <ExpenseDateCell date={exp.date} dateEnd={exp.dateEnd} />
+                      </td>
                       <td className="px-4 py-2">
-                        {exp.category ? (
-                          <span className="inline-block px-2 py-0.5 rounded-full text-xs bg-primary/10 text-primary border border-primary/20">
-                            {exp.category}
-                          </span>
-                        ) : "—"}
+                        {exp.category ? <CategoryTag category={exp.category} /> : "—"}
                       </td>
                       <td className="px-4 py-2 text-foreground font-mono tabular-nums text-sm">{formatAmount(exp.amount)}</td>
                       <td className="px-4 py-2 text-muted-foreground text-sm">{exp.location || "—"}</td>
@@ -471,12 +428,8 @@ export default function TripExpensesPage() {
                     </span>
                   </div>
                   <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                    <span>{formatDate(exp.date)}</span>
-                    {exp.category && (
-                      <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
-                        {exp.category}
-                      </span>
-                    )}
+                    <ExpenseDateCell date={exp.date} dateEnd={exp.dateEnd} />
+                    {exp.category && <CategoryTag category={exp.category} />}
                     {exp.location && <span>· {exp.location}</span>}
                   </div>
                 </div>

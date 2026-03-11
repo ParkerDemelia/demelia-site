@@ -39,18 +39,22 @@ export async function GET() {
       cursor = response.has_more ? response.next_cursor : undefined
     } while (cursor)
 
-    const expenses = allResults.map((page: any) => {
-      const props = page.properties
-      return {
-        id: page.id,
-        expense: extractText(props["Expense"]),
-        date: extractText(props["Date"]),
-        category: extractText(props["Category"]),
-        amount: props["Amount (USD)"]?.number ?? 0,
-        notes: extractText(props["NOTES"]),
-        location: extractText(props["Location"]),
-      }
-    })
+    const expenses = allResults
+      .filter((page: any) => page.properties["Amount (USD)"]?.number != null)
+      .map((page: any) => {
+        const props = page.properties
+        const dateProp = props["Date"]
+        return {
+          id: page.id,
+          expense: extractText(props["Expense"]),
+          date: dateProp?.date?.start ?? "",
+          dateEnd: dateProp?.date?.end ?? "",
+          category: extractText(props["Category"]),
+          amount: props["Amount (USD)"].number,
+          notes: extractText(props["NOTES"]),
+          location: extractText(props["Location"]),
+        }
+      })
 
     return Response.json({ expenses }, {
       headers: { "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600" },
