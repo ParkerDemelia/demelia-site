@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Mail, Instagram, Github, Youtube, Rss } from "lucide-react"
 import { LinkedBlog } from "@/components/linked-blog"
-import { TripExpensesOverview } from "@/components/trip-expenses-widget"
 
 export default function HomePage() {
   const socialLinks = [
@@ -122,7 +121,7 @@ to take the first steps
     mesa por uno
   </a>
 <br/>
-{/*
+
   trip expenses:{" "}
   <a
     href="/trip-expenses"
@@ -130,16 +129,6 @@ to take the first steps
   >
     view all
   </a>
-</p>
-
-<a href="/trip-expenses" className="block max-w-2xl mx-auto hover:opacity-90 transition-opacity">
-  <TripExpensesOverview compact />
-</a>
-
-
-<p className="text-center text-sm text-muted-foreground">
-
-*/}
 
   {/*
   podcast episode:{" "}
