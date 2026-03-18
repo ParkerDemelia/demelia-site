@@ -22,9 +22,10 @@ const COLUMNS: { key: SortKey; label: string }[] = [
   { key: "location", label: "Location" },
 ]
 
-const COUNTRY_DATES: Record<string, { start: string; end: string }> = {
-  "Colombia":   { start: "Feb 2",  end: "Mar 2" },
-  "Guatemala":  { start: "Mar 2",  end: "Present" },
+const COUNTRY_DAYS: Record<string, number> = {
+  "Colombia": 28,
+  "Guatemala": 10,
+  "El Salvador": 7,
 }
 
 const CURRENT_LOCATION = "Antigua, Guatemala"
@@ -234,8 +235,8 @@ export default function TripExpensesPage() {
                         >
                           <span className="text-[11px] text-muted-foreground shrink-0 group-hover:text-foreground transition-colors">
                             {country}
-                            {COUNTRY_DATES[country] && (
-                              <span className="text-muted-foreground/50"> — {COUNTRY_DATES[country].start} – {COUNTRY_DATES[country].end}</span>
+                            {COUNTRY_DAYS[country] && (
+                              <span className="text-muted-foreground/50"> — {COUNTRY_DAYS[country]} days</span>
                             )}
                           </span>
                           <div className="flex-1 h-1 bg-muted rounded-full overflow-hidden">
