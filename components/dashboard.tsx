@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Mail, Instagram, Github, Youtube, Rss, ExternalLink, Play, BookOpen, FolderGit2, MapPin, ShoppingBag } from "lucide-react"
+import Link from "next/link"
+import { Mail, Instagram, Github, Youtube, Rss, ExternalLink, Play, BookOpen, Briefcase, MapPin, ShoppingBag } from "lucide-react"
 import { TripExpensesOverview } from "@/components/trip-expenses-widget"
 
 interface Video {
@@ -19,15 +20,6 @@ interface BlogPost {
   url: string
 }
 
-interface Project {
-  id: number
-  name: string
-  description: string
-  url: string
-  language: string
-  stars: number
-  updated: string
-}
 
 const SOCIAL_LINKS = [
   { name: "YouTube", url: "https://youtube.com/@parker.demelia", icon: Youtube },
@@ -44,15 +36,7 @@ const GEAR = [
   { name: "DJI Osmo Pocket 3", url: "https://amzn.to/45fO98E" },
 ]
 
-const LANG_COLORS: Record<string, string> = {
-  TypeScript: "oklch(0.65 0.15 250)",
-  JavaScript: "oklch(0.75 0.15 80)",
-  Python: "oklch(0.60 0.15 260)",
-  Go: "oklch(0.70 0.12 200)",
-  Rust: "oklch(0.60 0.12 30)",
-  HTML: "oklch(0.65 0.18 25)",
-  CSS: "oklch(0.60 0.15 280)",
-}
+
 
 function timeAgo(dateStr: string) {
   if (!dateStr) return ""
@@ -219,61 +203,36 @@ function ExpensesWidget() {
   )
 }
 
+const WORK_HIGHLIGHTS = [
+  { name: "Hotel Terra Maya", category: "Web Design" },
+  { name: "3 Hermanos", category: "Web Design" },
+  { name: "Maine Purity Test", category: "App" },
+  { name: "Thomas College", category: "Social Media" },
+]
+
 function ProjectsWidget() {
-  const [projects, setProjects] = useState<Project[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    fetch("/api/github")
-      .then(res => res.json())
-      .then(data => setProjects(data.projects || []))
-      .catch(() => {})
-      .finally(() => setLoading(false))
-  }, [])
-
   return (
     <CardShell>
-      <CardHeader icon={FolderGit2} title="projects" href="https://github.com/parkerdemelia" />
-      {loading ? (
-        <div className="space-y-3">
-          {[1, 2, 3].map(i => (
-            <div key={i} className="space-y-1.5">
-              <SkeletonLine className="w-1/2" />
-              <SkeletonLine className="w-full" />
-            </div>
-          ))}
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+          <Briefcase className="h-4 w-4" />
+          <span>work</span>
         </div>
-      ) : (
-        <div className="space-y-3">
-          {projects.slice(0, 4).map(project => (
-            <a
-              key={project.id}
-              href={project.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block group"
-            >
-              <div className="flex items-center gap-2">
-                <p className="text-sm text-foreground font-medium group-hover:text-primary transition-colors truncate">
-                  {project.name}
-                </p>
-                {project.language && (
-                  <span className="flex items-center gap-1 shrink-0">
-                    <span
-                      className="w-2 h-2 rounded-full"
-                      style={{ backgroundColor: LANG_COLORS[project.language] || "oklch(0.6 0 0)" }}
-                    />
-                    <span className="text-[10px] text-muted-foreground">{project.language}</span>
-                  </span>
-                )}
-              </div>
-              <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-1">
-                {project.description}
-              </p>
-            </a>
-          ))}
-        </div>
-      )}
+        <Link href="/work" className="text-muted-foreground/50 hover:text-muted-foreground transition-colors">
+          <ExternalLink className="h-3.5 w-3.5" />
+        </Link>
+      </div>
+      <div className="space-y-2">
+        {WORK_HIGHLIGHTS.map(h => (
+          <div key={h.name} className="flex items-center justify-between">
+            <span className="text-sm text-foreground">{h.name}</span>
+            <span className="text-[10px] text-muted-foreground">{h.category}</span>
+          </div>
+        ))}
+      </div>
+      <Link href="/work" className="block mt-3 text-xs text-primary hover:underline">
+        view all work →
+      </Link>
     </CardShell>
   )
 }
@@ -310,6 +269,11 @@ export function Dashboard() {
           <div>
             <h1 className="text-2xl font-bold text-foreground tracking-tight">parker demelia</h1>
             <p className="text-sm text-muted-foreground mt-0.5">building things, going places</p>
+            <p className="text-[11px] text-muted-foreground/50 mt-1">
+              <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">resume</a>
+              <span className="mx-1">|</span>
+              <a href="/cover.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">cover</a>
+            </p>
           </div>
           <div className="flex items-center gap-1">
             {SOCIAL_LINKS.map(({ name, url, icon: Icon }) => (
