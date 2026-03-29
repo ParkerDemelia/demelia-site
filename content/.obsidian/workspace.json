@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "antigua.md",
+                "file": "bio.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "antigua"
+              "title": "bio"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "antigua.md",
+                "file": "bio.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for antigua"
+              "title": "Backlinks for bio"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "antigua.md",
+                "file": "bio.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from antigua"
+              "title": "Outgoing links from bio"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "antigua.md",
+                "file": "bio.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of antigua"
+              "title": "Outline of bio"
             }
           }
         ]
@@ -185,8 +185,8 @@
   },
   "active": "4323dfdce54965a4",
   "lastOpenFiles": [
-    "work.md",
     "antigua.md",
+    "work.md",
     "bio.md"
   ]
 }
