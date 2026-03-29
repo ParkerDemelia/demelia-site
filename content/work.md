@@ -1,10 +1,11 @@
 ## Web Design
 
 - [Hotel Terra Maya](https://www.hotelterramaya.com/) — Full website design and development for a boutique hotel in Guatemala.
-- [3 Hermanos](http://3hermanosantigua.com/) — Website for a restaurant in Antigua, Guatemala.
+- [3 Hermanos](http://3hermanosantigua.com/) — Website for a tour agency in Antigua, Guatemala.
+- [Keep It Clean HP](https://keepitcleanhp.com/) - Wordpress implementation for a Heat Pump cleaning business in Coastal Maine. 
 
 
-## Apps & Experiments
+## Apps & Fun Projects
 
 - [Maine Purity Test](https://mainepuritytest.vercel.app/) — How Maine are you? A viral purity test for Mainers.
 - [LogoX](https://logox-phi.vercel.app/editor?logo=tech-cube) — Browser-based logo editor with real-time preview and export.
@@ -21,5 +22,4 @@
 ## Social Media
 
 - Thomas College — Social media content strategy and management for Thomas College.
-- Healthy Habitat — Social media management and content creation for a wellness brand.
 - Minot Country Store — Social media presence and engagement for a local country store.
