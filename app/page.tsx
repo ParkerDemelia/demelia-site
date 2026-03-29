@@ -94,7 +94,7 @@ export default function HomePage() {
             <p className="text-muted-foreground mt-2 text-sm">
               <Link href="/work" className="hover:text-foreground transition-colors">work</Link>
               {" · "}
-              <Link href="/trip-expenses" className="hover:text-foreground transition-colors">trip expenses</Link>
+              <Link href="/trip-expenses" className="hover:text-foreground transition-colors">backpacking expenses</Link>
             </p>
           </div>
         </section>
