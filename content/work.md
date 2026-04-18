@@ -3,6 +3,7 @@
 - [Hotel Terra Maya](https://www.hotelterramaya.com/) — Full website design and development for a boutique hotel in Guatemala.
 - [3 Hermanos](http://3hermanosantigua.com/) — Website for a tour agency in Antigua, Guatemala.
 - [Keep It Clean HP](https://keepitcleanhp.com/) - Wordpress implementation for a Heat Pump cleaning business in Coastal Maine. 
+- [Mission Monte Líbano](https://montelibano.vercel.app/) - Website for a Mission church working for the interest of the Lord. 
 
 
 ## Apps & Fun Projects
@@ -18,6 +19,7 @@
 - [Fortune Cookie](https://myfortune-steel.vercel.app/) — Digital fortune cookie generator.
 - [The Coffee House](https://thecoffeehouse-kappa.vercel.app/) — Coffee shop landing page and menu.
 - Plantify — Plant care and identification app. School project.
+- Receipt Photo Booth - Web hosted photobooth for memorable photos.
 
 ## Social Media
 

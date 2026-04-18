@@ -24,8 +24,8 @@ const COLUMNS: { key: SortKey; label: string }[] = [
 
 const COUNTRY_DAYS: Record<string, number> = {
   "Colombia": 28,
-  "Guatemala": 10,
-  "El Salvador": 7,
+  "Guatemala": 42,
+  "El Salvador": 6,
 }
 
 const CURRENT_LOCATION = "Antigua, Guatemala"

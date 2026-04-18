@@ -6,7 +6,7 @@ In my free time I like running, cliff jumping, [traveling](/trip-expenses), long
 
 I graduated from [Thomas College](http://thomas.edu/) with my Bachelor's in Computer Science. I worked for the school as a Social Media Ambassador & Videographer, and interned at Compounding Solutions in the IT department. 
 
-Since then, I've worked with clients like [Keep It Clean Heat Pumps](https://keepitcleanhp.com/), Minot Country Store, [Hotel Terra Maya](https://www.hotelterramaya.com/), and [3 Hermanos Antigua](https://3hermanosantigua.com/). 
+Since then, I've worked with clients like [Keep It Clean Heat Pumps](https://keepitcleanhp.com/), Minot Country Store, [Hotel Terra Maya](https://www.hotelterramaya.com/), [3 Hermanos Antigua](https://3hermanosantigua.com/), and [Mission Monte Líbano](https://montelibano.vercel.app/).
 
 **I can design and deploy websites, film and edit videos, create social media content, help execute automations, and much more. If you like my [work](/work), reach out!**
 
