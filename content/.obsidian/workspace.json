@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "antigua.md",
+                "file": "bio.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "antigua"
+              "title": "bio"
             }
           }
         ]
@@ -185,8 +185,8 @@
   },
   "active": "4323dfdce54965a4",
   "lastOpenFiles": [
-    "bio.md",
+    "antigua.md",
     "work.md",
-    "antigua.md"
+    "bio.md"
   ]
 }
