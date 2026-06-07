@@ -43,7 +43,10 @@ export async function GET() {
     } while (cursor)
 
     const expenses = allResults
-      .filter((page: any) => page.properties["Amount (USD)"]?.number != null)
+      .filter((page: any) =>
+        page.properties["Amount (USD)"]?.number != null ||
+        page.properties["Earned"]?.number != null
+      )
       .map((page: any) => {
         const props = page.properties
         const dateProp = props["Date"]
@@ -53,7 +56,8 @@ export async function GET() {
           date: dateProp?.date?.start ?? "",
           dateEnd: dateProp?.date?.end ?? "",
           category: extractText(props["Category"]),
-          amount: props["Amount (USD)"].number,
+          amount: props["Amount (USD)"]?.number ?? 0,
+          earned: props["Earned"]?.number ?? 0,
           notes: extractText(props["NOTES"]),
           location: extractText(props["Location"]),
         }

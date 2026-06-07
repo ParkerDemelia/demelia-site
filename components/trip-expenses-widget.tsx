@@ -9,6 +9,8 @@ export interface Expense {
   dateEnd: string
   category: string
   amount: number
+  earned: number
+  notes: string
   location: string
 }
 
@@ -22,13 +24,6 @@ export const CATEGORY_COLORS = [
   "oklch(0.60 0.10 200)",
   "oklch(0.55 0.08 270)",
 ]
-
-const COUNTRY_DATES: Record<string, { start: string; end: string }> = {
-  "Colombia":   { start: "Feb 2",  end: "Mar 2" },
-  "Guatemala":  { start: "Mar 2",  end: "Present" },
-}
-
-const CURRENT_LOCATION = "Antigua, Guatemala"
 
 function DonutChart({ data, total, colors, onClickSegment, activeSegment }: {
   data: [string, number][]
@@ -109,19 +104,24 @@ export function useExpenses() {
 
   const overviewStats = useMemo(() => {
     const dates = allExpenses.map(e => e.date).filter(Boolean).sort()
-    const totalAll = allExpenses.reduce((s, e) => s + (e.amount || 0), 0)
+    const totalSpent = allExpenses.reduce((s, e) => s + (e.amount || 0), 0)
+    const totalEarned = allExpenses.reduce((s, e) => s + (e.earned || 0), 0)
     const byCountry: Record<string, number> = {}
     allExpenses.forEach(e => {
+      if (!e.amount) return
       const loc = e.location || "Unknown"
-      byCountry[loc] = (byCountry[loc] || 0) + (e.amount || 0)
+      byCountry[loc] = (byCountry[loc] || 0) + e.amount
     })
     const byCategory: Record<string, number> = {}
     allExpenses.forEach(e => {
+      if (!e.amount) return
       const cat = e.category || "Other"
-      byCategory[cat] = (byCategory[cat] || 0) + (e.amount || 0)
+      byCategory[cat] = (byCategory[cat] || 0) + e.amount
     })
     return {
-      total: totalAll,
+      total: totalSpent,
+      totalEarned,
+      net: totalEarned - totalSpent,
       startDate: dates[0] || "",
       endDate: dates[dates.length - 1] || "",
       byCountry: Object.entries(byCountry).sort((a, b) => b[1] - a[1]),
@@ -154,54 +154,55 @@ export function TripExpensesOverview({ compact = false }: { compact?: boolean })
   if (error) return null
 
   return (
-    <div className={`border border-border rounded-lg bg-muted/5 ${compact ? "px-3 py-2" : "px-4 py-3"}`}>
-      <div className="flex items-start gap-4">
-        <div className="flex-1 min-w-0">
-          <div className="flex items-baseline gap-3 mb-0.5">
-            <span className={`font-bold text-foreground font-mono tabular-nums ${compact ? "text-xl" : "text-2xl"}`}>
-              {formatAmount(overviewStats.total)}
+    <div className={`border border-border rounded-lg bg-muted/5 space-y-2 ${compact ? "px-3 py-2" : "px-4 py-2.5"}`}>
+      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <div className="flex items-baseline gap-1">
+            <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Spent</span>
+            <span className={`font-bold text-foreground font-mono tabular-nums leading-none ${compact ? "text-base" : "text-lg"}`}>
+              −{formatAmount(overviewStats.total)}
             </span>
-            {overviewStats.startDate && (
-              <span className="text-[10px] text-muted-foreground whitespace-nowrap">
-                {formatDateFull(overviewStats.startDate)} — {formatDateFull(overviewStats.endDate)}
-              </span>
-            )}
           </div>
-          <div className="space-y-0.5 mt-1.5">
+          <div className="flex items-baseline gap-1">
+            <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Earned</span>
+            <span className={`font-bold text-emerald-500 font-mono tabular-nums leading-none ${compact ? "text-base" : "text-lg"}`}>
+              +{formatAmount(overviewStats.totalEarned)}
+            </span>
+          </div>
+          <div className="flex items-baseline gap-1">
+            <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Net</span>
+            <span className={`font-bold font-mono tabular-nums leading-none ${compact ? "text-base" : "text-lg"} ${overviewStats.net >= 0 ? "text-emerald-500" : "text-red-500"}`}>
+              {overviewStats.net >= 0 ? "+" : "−"}{formatAmount(Math.abs(overviewStats.net))}
+            </span>
+          </div>
+        </div>
+        {!compact && overviewStats.startDate && (
+          <span className="text-[10px] text-muted-foreground whitespace-nowrap">
+            {formatDateFull(overviewStats.startDate)} — {formatDateFull(overviewStats.endDate)}
+          </span>
+        )}
+      </div>
+
+      <div className="flex items-end gap-3">
+        {overviewStats.byCountry.length > 0 && (
+          <div className="flex-1 min-w-0 space-y-0.5">
             {overviewStats.byCountry.map(([country, amount]) => {
               const pct = overviewStats.total > 0 ? (amount / overviewStats.total) * 100 : 0
               return (
                 <div key={country} className="flex items-center gap-1.5">
-                  <span className="text-[11px] text-muted-foreground shrink-0">
-                    {country}
-                    {COUNTRY_DATES[country] && (
-                      <span className="text-muted-foreground/50"> — {COUNTRY_DATES[country].start} – {COUNTRY_DATES[country].end}</span>
-                    )}
-                  </span>
+                  <span className="text-[11px] text-muted-foreground shrink-0 w-24 truncate">{country}</span>
                   <div className="flex-1 h-1 bg-muted rounded-full overflow-hidden">
                     <div className="h-full bg-primary/60 rounded-full" style={{ width: `${pct}%` }} />
                   </div>
-                  <span className="font-mono tabular-nums text-[11px] text-foreground w-14 text-right">{formatAmount(amount)}</span>
+                  <span className="font-mono tabular-nums text-[11px] text-foreground w-14 text-right shrink-0">{formatAmount(amount)}</span>
                 </div>
               )
             })}
           </div>
-          <div className="flex items-center gap-1.5 mt-1.5">
-            <span className="relative flex h-2.5 w-2.5 shrink-0">
-              <span
-                className="absolute inline-flex h-full w-full rounded-full bg-red-500"
-                style={{ animation: "pulse-ring 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite" }}
-              />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500" />
-            </span>
-            <span className="text-[11px] text-muted-foreground">
-              currently in <span className="text-foreground font-medium">{CURRENT_LOCATION}</span>
-            </span>
-          </div>
-        </div>
+        )}
 
-        <div className="flex items-center gap-3 shrink-0">
-          <div className={compact ? "w-16 h-16" : "w-20 h-20 md:w-24 md:h-24"}>
+        <div className="flex items-center gap-2 shrink-0">
+          <div className={compact ? "w-12 h-12" : "w-14 h-14 md:w-16 md:h-16"}>
             <DonutChart
               data={overviewStats.byCategory}
               total={overviewStats.total}
@@ -209,15 +210,15 @@ export function TripExpensesOverview({ compact = false }: { compact?: boolean })
             />
           </div>
           {!compact && (
-            <div className="space-y-0 hidden sm:block">
+            <div className="space-y-0 hidden sm:grid sm:grid-cols-2 sm:gap-x-3">
               {overviewStats.byCategory.map(([cat, amount]) => (
-                <div key={cat} className="flex items-center gap-1.5">
+                <div key={cat} className="flex items-center gap-1">
                   <span
-                    className="w-2 h-2 rounded-full shrink-0"
+                    className="w-1.5 h-1.5 rounded-full shrink-0"
                     style={{ backgroundColor: categoryColorMap[cat] }}
                   />
-                  <span className="text-[11px] text-muted-foreground w-24 truncate">{cat}</span>
-                  <span className="font-mono tabular-nums text-[11px] text-foreground w-14 text-right">{formatAmount(amount)}</span>
+                  <span className="text-[10px] text-muted-foreground truncate">{cat}</span>
+                  <span className="font-mono tabular-nums text-[10px] text-foreground ml-auto shrink-0">{formatAmount(amount)}</span>
                 </div>
               ))}
             </div>

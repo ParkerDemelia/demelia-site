@@ -11,33 +11,29 @@ import {
   formatAmount,
 } from "@/components/trip-expenses-widget"
 
-type SortKey = "expense" | "date" | "category" | "amount" | "location"
+type SortKey = "expense" | "date" | "category" | "price" | "location"
 type SortDirection = "ascending" | "descending"
 
 const COLUMNS: { key: SortKey; label: string }[] = [
   { key: "expense", label: "Expense" },
   { key: "date", label: "Date" },
   { key: "category", label: "Category" },
-  { key: "amount", label: "Amount (USD)" },
+  { key: "price", label: "Price" },
   { key: "location", label: "Location" },
 ]
 
-const COUNTRY_DAYS: Record<string, number> = {
-  "Colombia": 28,
-  "Guatemala": 42,
-  "El Salvador": 6,
+function signedPrice(e: Expense): number {
+  return (e.earned || 0) - (e.amount || 0)
 }
-
-const CURRENT_LOCATION = "Antigua, Guatemala"
 
 function compareValues(a: Expense, b: Expense, key: SortKey, dir: SortDirection): number {
   let cmp = 0
-  if (key === "amount") {
-    cmp = (a.amount || 0) - (b.amount || 0)
+  if (key === "price") {
+    cmp = signedPrice(a) - signedPrice(b)
   } else if (key === "date") {
     cmp = (a.date || "").localeCompare(b.date || "")
   } else {
-    cmp = (a[key] || "").localeCompare(b[key] || "")
+    cmp = (a[key] as string || "").localeCompare((b[key] as string) || "")
   }
   return dir === "ascending" ? cmp : -cmp
 }
@@ -89,12 +85,23 @@ function ExpenseDateCell({ date, dateEnd }: { date: string; dateEnd: string }) {
   return <span>{formatDate(date)}</span>
 }
 
+function PriceCell({ exp }: { exp: Expense }) {
+  if (exp.earned > 0) {
+    return <span className="text-emerald-500">+{formatAmount(exp.earned)}</span>
+  }
+  if (exp.amount > 0) {
+    return <span className="text-foreground">{formatAmount(exp.amount)}</span>
+  }
+  return <span className="text-muted-foreground/40">—</span>
+}
+
 export default function TripExpensesPage() {
   const { allExpenses, loading, error, overviewStats, categoryColorMap } = useExpenses()
   const [sortKey, setSortKey] = useState<SortKey>("date")
   const [sortDirection, setSortDirection] = useState<SortDirection>("descending")
   const [selectedLocations, setSelectedLocations] = useState<Set<string>>(new Set())
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set())
+  const [filterType, setFilterType] = useState<"all" | "spent" | "earned">("all")
 
   const locations = useMemo(() => {
     const set = new Set<string>()
@@ -110,6 +117,11 @@ export default function TripExpensesPage() {
 
   const filtered = useMemo(() => {
     let items = allExpenses
+    if (filterType === "spent") {
+      items = items.filter(e => (e.amount || 0) > 0)
+    } else if (filterType === "earned") {
+      items = items.filter(e => (e.earned || 0) > 0)
+    }
     if (selectedLocations.size > 0) {
       items = items.filter(e => selectedLocations.has(e.location))
     }
@@ -117,11 +129,17 @@ export default function TripExpensesPage() {
       items = items.filter(e => selectedCategories.has(e.category))
     }
     return [...items].sort((a, b) => compareValues(a, b, sortKey, sortDirection))
-  }, [allExpenses, selectedLocations, selectedCategories, sortKey, sortDirection])
+  }, [allExpenses, selectedLocations, selectedCategories, sortKey, sortDirection, filterType])
 
-  const filteredTotal = useMemo(() =>
+  const filteredSpent = useMemo(() =>
     filtered.reduce((s, e) => s + (e.amount || 0), 0)
   , [filtered])
+
+  const filteredEarned = useMemo(() =>
+    filtered.reduce((s, e) => s + (e.earned || 0), 0)
+  , [filtered])
+
+  const filteredNet = filteredEarned - filteredSpent
 
   function toggleLocation(loc: string) {
     setSelectedLocations(prev => {
@@ -155,7 +173,7 @@ export default function TripExpensesPage() {
     return sortDirection === "ascending" ? " ↑" : " ↓"
   }
 
-  const showingFiltered = selectedLocations.size > 0 || selectedCategories.size > 0
+  const showingFiltered = selectedLocations.size > 0 || selectedCategories.size > 0 || filterType !== "all"
   const activeCategory = selectedCategories.size === 1 ? Array.from(selectedCategories)[0] : null
 
   function CategoryTag({ category }: { category: string }) {
@@ -174,6 +192,13 @@ export default function TripExpensesPage() {
     )
   }
 
+  function SignedAmount({ value, zeroAsDash = false }: { value: number; zeroAsDash?: boolean }) {
+    if (value === 0 && zeroAsDash) return <span className="text-muted-foreground/40">—</span>
+    if (value > 0) return <span className="text-emerald-500">+{formatAmount(value)}</span>
+    if (value < 0) return <span className="text-red-500">−{formatAmount(Math.abs(value))}</span>
+    return <span className="text-foreground">{formatAmount(0)}</span>
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <main className="container mx-auto px-4 py-8 max-w-4xl">
@@ -188,7 +213,7 @@ export default function TripExpensesPage() {
             trip expenses
           </h1>
           <p className="text-sm text-muted-foreground">
-            every penny from a month and a half of backpacking, updated daily.
+            total 2026 expenses and income — every penny tracked daily.
           </p>
         </div>
 
@@ -208,20 +233,38 @@ export default function TripExpensesPage() {
         {!loading && !error && (
           <>
             {/* Overview */}
-            <div className="border border-border rounded-lg px-4 py-3 mb-4 bg-muted/5">
-              <div className="flex items-start gap-4">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-baseline gap-3 mb-0.5">
-                    <span className="text-2xl font-bold text-foreground font-mono tabular-nums">
-                      {formatAmount(overviewStats.total)}
+            <div className="border border-border rounded-lg px-4 py-4 mb-4 bg-muted/5 flex flex-col md:flex-row gap-6">
+              {/* Left Side: Stats and Locations */}
+              <div className="flex-1 min-w-0 space-y-4">
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-2 lg:gap-x-4">
+                  <button 
+                    onClick={() => setFilterType(prev => prev === "spent" ? "all" : "spent")}
+                    className={`flex items-baseline gap-1.5 transition-opacity ${filterType === "earned" ? "opacity-40" : "hover:opacity-80"}`}
+                  >
+                    <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Spent</span>
+                    <span className="text-lg font-bold text-foreground font-mono tabular-nums leading-none">
+                      −{formatAmount(overviewStats.total)}
                     </span>
-                    {overviewStats.startDate && (
-                      <span className="text-[10px] text-muted-foreground whitespace-nowrap">
-                        {formatDateFull(overviewStats.startDate)} — {formatDateFull(overviewStats.endDate)}
-                      </span>
-                    )}
+                  </button>
+                  <button 
+                    onClick={() => setFilterType(prev => prev === "earned" ? "all" : "earned")}
+                    className={`flex items-baseline gap-1.5 transition-opacity ${filterType === "spent" ? "opacity-40" : "hover:opacity-80"}`}
+                  >
+                    <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Earned</span>
+                    <span className="text-lg font-bold text-emerald-500 font-mono tabular-nums leading-none">
+                      +{formatAmount(overviewStats.totalEarned)}
+                    </span>
+                  </button>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Net</span>
+                    <span className={`text-lg font-bold font-mono tabular-nums leading-none ${overviewStats.net >= 0 ? "text-emerald-500" : "text-red-500"}`}>
+                      {overviewStats.net >= 0 ? "+" : "−"}{formatAmount(Math.abs(overviewStats.net))}
+                    </span>
                   </div>
-                  <div className="space-y-0.5 mt-2">
+                </div>
+
+                {overviewStats.byCountry.length > 0 && (
+                  <div className="space-y-1">
                     {overviewStats.byCountry.map(([country, amount]) => {
                       const pct = overviewStats.total > 0 ? (amount / overviewStats.total) * 100 : 0
                       const active = selectedLocations.has(country)
@@ -229,69 +272,55 @@ export default function TripExpensesPage() {
                         <button
                           key={country}
                           onClick={() => toggleLocation(country)}
-                          className={`flex items-center gap-1.5 w-full text-left group transition-opacity ${
+                          className={`flex items-center gap-2 w-full text-left group transition-opacity ${
                             selectedLocations.size > 0 && !active ? "opacity-40" : ""
                           }`}
                         >
-                          <span className="text-[11px] text-muted-foreground shrink-0 group-hover:text-foreground transition-colors">
+                          <span className="text-xs text-muted-foreground shrink-0 w-28 truncate group-hover:text-foreground transition-colors">
                             {country}
-                            {COUNTRY_DAYS[country] && (
-                              <span className="text-muted-foreground/50"> — {COUNTRY_DAYS[country]} days</span>
-                            )}
                           </span>
-                          <div className="flex-1 h-1 bg-muted rounded-full overflow-hidden">
+                          <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
                             <div className="h-full bg-primary/60 rounded-full" style={{ width: `${pct}%` }} />
                           </div>
-                          <span className="font-mono tabular-nums text-[11px] text-foreground w-14 text-right">{formatAmount(amount)}</span>
+                          <span className="font-mono tabular-nums text-xs text-foreground w-16 text-right shrink-0">{formatAmount(amount)}</span>
                         </button>
                       )
                     })}
                   </div>
-                  <div className="flex items-center gap-1.5 mt-2">
-                    <span className="relative flex h-2.5 w-2.5 shrink-0">
-                      <span
-                        className="absolute inline-flex h-full w-full rounded-full bg-red-500"
-                        style={{ animation: "pulse-ring 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite" }}
-                      />
-                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500" />
-                    </span>
-                    <span className="text-[11px] text-muted-foreground">
-                      currently in <span className="text-foreground font-medium">{CURRENT_LOCATION}</span>
-                    </span>
-                  </div>
-                </div>
+                )}
+              </div>
 
-                <div className="flex items-center gap-3 shrink-0">
-                  <div className="w-20 h-20 md:w-24 md:h-24">
-                    <DonutChart
-                      data={overviewStats.byCategory}
-                      total={overviewStats.total}
-                      colors={CATEGORY_COLORS}
-                      onClickSegment={toggleCategory}
-                      activeSegment={activeCategory}
-                    />
-                  </div>
-                  <div className="space-y-0 hidden sm:block">
-                    {overviewStats.byCategory.map(([cat, amount]) => {
-                      const active = selectedCategories.has(cat)
-                      return (
-                        <button
-                          key={cat}
-                          onClick={() => toggleCategory(cat)}
-                          className={`flex items-center gap-1.5 w-full text-left transition-opacity ${
-                            selectedCategories.size > 0 && !active ? "opacity-40" : ""
-                          }`}
-                        >
-                          <span
-                            className="w-2 h-2 rounded-full shrink-0"
-                            style={{ backgroundColor: categoryColorMap[cat] }}
-                          />
-                          <span className="text-[11px] text-muted-foreground w-24 truncate hover:text-foreground transition-colors">{cat}</span>
-                          <span className="font-mono tabular-nums text-[11px] text-foreground w-14 text-right">{formatAmount(amount)}</span>
-                        </button>
-                      )
-                    })}
-                  </div>
+              {/* Right Side: Pie Chart and Sorters */}
+              <div className="flex items-center gap-6 shrink-0 md:justify-end">
+                <div className="w-24 h-24 md:w-32 md:h-32 shrink-0">
+                  <DonutChart
+                    data={overviewStats.byCategory}
+                    total={overviewStats.total}
+                    colors={CATEGORY_COLORS}
+                    onClickSegment={toggleCategory}
+                    activeSegment={activeCategory}
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5 shrink-0 hidden sm:flex">
+                  {overviewStats.byCategory.map(([cat, amount]) => {
+                    const active = selectedCategories.has(cat)
+                    return (
+                      <button
+                        key={cat}
+                        onClick={() => toggleCategory(cat)}
+                        className={`flex items-center gap-2 text-left transition-opacity ${
+                          selectedCategories.size > 0 && !active ? "opacity-40 hover:opacity-60" : "hover:opacity-80"
+                        }`}
+                      >
+                        <span
+                          className="w-2 h-2 rounded-full shrink-0"
+                          style={{ backgroundColor: categoryColorMap[cat] }}
+                        />
+                        <span className="text-xs text-muted-foreground w-28 truncate hover:text-foreground transition-colors">{cat}</span>
+                        <span className="font-mono tabular-nums text-xs text-foreground ml-auto shrink-0">{formatAmount(amount)}</span>
+                      </button>
+                    )
+                  })}
                 </div>
               </div>
             </div>
@@ -299,6 +328,14 @@ export default function TripExpensesPage() {
             {/* Filter pills */}
             <div className="mb-3 overflow-x-auto scrollbar-none">
               <div className="flex items-center gap-1.5 min-w-max py-0.5">
+                {filterType !== "all" && (
+                  <button
+                    onClick={() => setFilterType("all")}
+                    className="px-2.5 py-1 rounded text-xs font-medium bg-primary text-primary-foreground shadow-sm transition-all whitespace-nowrap"
+                  >
+                    Type: {filterType === "spent" ? "Spent" : "Earned"}
+                  </button>
+                )}
                 {locations.map(loc => {
                   const active = selectedLocations.has(loc)
                   return (
@@ -315,7 +352,9 @@ export default function TripExpensesPage() {
                     </button>
                   )
                 })}
-                <span className="w-px h-4 bg-border mx-1 shrink-0" />
+                {locations.length > 0 && categories.length > 0 && (
+                  <span className="w-px h-4 bg-border mx-1 shrink-0" />
+                )}
                 {categories.map(cat => {
                   const active = selectedCategories.has(cat)
                   return (
@@ -336,7 +375,7 @@ export default function TripExpensesPage() {
                   <>
                     <span className="w-px h-4 bg-border mx-1 shrink-0" />
                     <button
-                      onClick={() => { setSelectedLocations(new Set()); setSelectedCategories(new Set()) }}
+                      onClick={() => { setSelectedLocations(new Set()); setSelectedCategories(new Set()); setFilterType("all"); }}
                       className="px-2.5 py-1 rounded text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all whitespace-nowrap"
                     >
                       ✕ clear
@@ -355,7 +394,9 @@ export default function TripExpensesPage() {
                       <th
                         key={col.key}
                         onClick={() => handleSort(col.key)}
-                        className="px-4 py-2.5 text-left font-medium text-muted-foreground cursor-pointer hover:text-foreground transition-colors select-none whitespace-nowrap text-xs"
+                        className={`px-4 py-2.5 font-medium text-muted-foreground cursor-pointer hover:text-foreground transition-colors select-none whitespace-nowrap text-xs ${
+                          col.key === "price" ? "text-right" : "text-left"
+                        }`}
                       >
                         {col.label}{sortIndicator(col.key)}
                       </th>
@@ -377,7 +418,9 @@ export default function TripExpensesPage() {
                       <td className="px-4 py-2">
                         {exp.category ? <CategoryTag category={exp.category} /> : "—"}
                       </td>
-                      <td className="px-4 py-2 text-foreground font-mono tabular-nums text-sm">{formatAmount(exp.amount)}</td>
+                      <td className="px-4 py-2 font-mono tabular-nums text-sm text-right whitespace-nowrap">
+                        <PriceCell exp={exp} />
+                      </td>
                       <td className="px-4 py-2 text-muted-foreground text-sm">{exp.location || "—"}</td>
                     </tr>
                   ))}
@@ -385,10 +428,10 @@ export default function TripExpensesPage() {
                 <tfoot>
                   <tr className="border-t-2 border-border bg-muted/30">
                     <td className="px-4 py-2.5 font-bold text-foreground text-sm" colSpan={3}>
-                      {showingFiltered ? `Filtered total (${filtered.length} expenses)` : `Total (${filtered.length} expenses)`}
+                      {showingFiltered ? `Filtered (${filtered.length})` : `Total (${filtered.length})`}
                     </td>
-                    <td className="px-4 py-2.5 font-bold text-foreground font-mono tabular-nums text-sm">
-                      {formatAmount(filteredTotal)}
+                    <td className="px-4 py-2.5 font-bold font-mono tabular-nums text-sm text-right whitespace-nowrap">
+                      <SignedAmount value={filteredNet} />
                     </td>
                     <td />
                   </tr>
@@ -424,24 +467,27 @@ export default function TripExpensesPage() {
                 <div key={exp.id} className="border border-border rounded-lg p-3 space-y-1.5 bg-muted/5">
                   <div className="flex items-start justify-between gap-2">
                     <span className="font-medium text-foreground text-sm">{exp.expense || "—"}</span>
-                    <span className="font-mono text-foreground font-medium tabular-nums whitespace-nowrap text-sm">
-                      {formatAmount(exp.amount)}
-                    </span>
+                    <div className="font-mono tabular-nums whitespace-nowrap text-sm text-right font-medium">
+                      <PriceCell exp={exp} />
+                    </div>
                   </div>
                   <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                     <ExpenseDateCell date={exp.date} dateEnd={exp.dateEnd} />
                     {exp.category && <CategoryTag category={exp.category} />}
                     {exp.location && <span>· {exp.location}</span>}
                   </div>
+                  {exp.notes && (
+                    <div className="text-xs text-muted-foreground/80">{exp.notes}</div>
+                  )}
                 </div>
               ))}
 
               <div className="border-t-2 border-border pt-3 flex justify-between items-center">
                 <span className="font-bold text-foreground text-sm">
-                  {showingFiltered ? `Filtered (${filtered.length})` : `Total (${filtered.length})`}
+                  {showingFiltered ? `Filtered (${filtered.length})` : `Net (${filtered.length})`}
                 </span>
-                <span className="font-bold text-foreground font-mono tabular-nums">
-                  {formatAmount(filteredTotal)}
+                <span className="font-bold font-mono tabular-nums">
+                  <SignedAmount value={filteredNet} />
                 </span>
               </div>
             </div>
