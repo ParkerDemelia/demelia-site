@@ -22,6 +22,11 @@ const COLUMNS: { key: SortKey; label: string }[] = [
   { key: "location", label: "Location" },
 ]
 
+const TRIPS: { id: string; label: string; start: string; end: string }[] = [
+  { id: "trip1", label: "Trip 1", start: "2026-01-19", end: "2026-04-19" },
+  { id: "trip2", label: "Trip 2", start: "2026-06-01", end: "2026-07-01" },
+]
+
 function signedPrice(e: Expense): number {
   return (e.earned || 0) - (e.amount || 0)
 }
@@ -102,6 +107,7 @@ export default function TripExpensesPage() {
   const [selectedLocations, setSelectedLocations] = useState<Set<string>>(new Set())
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set())
   const [filterType, setFilterType] = useState<"all" | "spent" | "earned">("all")
+  const [selectedTrip, setSelectedTrip] = useState<string | null>(null)
 
   const locations = useMemo(() => {
     const set = new Set<string>()
@@ -122,6 +128,12 @@ export default function TripExpensesPage() {
     } else if (filterType === "earned") {
       items = items.filter(e => (e.earned || 0) > 0)
     }
+    if (selectedTrip) {
+      const trip = TRIPS.find(t => t.id === selectedTrip)
+      if (trip) {
+        items = items.filter(e => e.date && e.date >= trip.start && e.date <= trip.end)
+      }
+    }
     if (selectedLocations.size > 0) {
       items = items.filter(e => selectedLocations.has(e.location))
     }
@@ -129,7 +141,7 @@ export default function TripExpensesPage() {
       items = items.filter(e => selectedCategories.has(e.category))
     }
     return [...items].sort((a, b) => compareValues(a, b, sortKey, sortDirection))
-  }, [allExpenses, selectedLocations, selectedCategories, sortKey, sortDirection, filterType])
+  }, [allExpenses, selectedLocations, selectedCategories, sortKey, sortDirection, filterType, selectedTrip])
 
   const filteredSpent = useMemo(() =>
     filtered.reduce((s, e) => s + (e.amount || 0), 0)
@@ -148,6 +160,10 @@ export default function TripExpensesPage() {
       else next.add(loc)
       return next
     })
+  }
+
+  function toggleTrip(id: string) {
+    setSelectedTrip(prev => (prev === id ? null : id))
   }
 
   function toggleCategory(cat: string) {
@@ -173,7 +189,7 @@ export default function TripExpensesPage() {
     return sortDirection === "ascending" ? " ↑" : " ↓"
   }
 
-  const showingFiltered = selectedLocations.size > 0 || selectedCategories.size > 0 || filterType !== "all"
+  const showingFiltered = selectedLocations.size > 0 || selectedCategories.size > 0 || filterType !== "all" || selectedTrip !== null
   const activeCategory = selectedCategories.size === 1 ? Array.from(selectedCategories)[0] : null
 
   function CategoryTag({ category }: { category: string }) {
@@ -210,7 +226,7 @@ export default function TripExpensesPage() {
             ← back
           </Link>
           <h1 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">
-            trip expenses
+            2026 expenses
           </h1>
           <p className="text-sm text-muted-foreground">
             total 2026 expenses and income — every penny tracked daily.
@@ -328,6 +344,24 @@ export default function TripExpensesPage() {
             {/* Filter pills */}
             <div className="mb-3 overflow-x-auto scrollbar-none">
               <div className="flex items-center gap-1.5 min-w-max py-0.5">
+                {TRIPS.map(trip => {
+                  const active = selectedTrip === trip.id
+                  return (
+                    <button
+                      key={trip.id}
+                      onClick={() => toggleTrip(trip.id)}
+                      title={`${formatDateFull(trip.start)} – ${formatDateFull(trip.end)}`}
+                      className={`px-2.5 py-1 rounded text-xs font-medium transition-all whitespace-nowrap ${
+                        active
+                          ? "bg-primary text-primary-foreground shadow-sm"
+                          : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                      }`}
+                    >
+                      {trip.label}
+                    </button>
+                  )
+                })}
+                <span className="w-px h-4 bg-border mx-1 shrink-0" />
                 {filterType !== "all" && (
                   <button
                     onClick={() => setFilterType("all")}
@@ -375,7 +409,7 @@ export default function TripExpensesPage() {
                   <>
                     <span className="w-px h-4 bg-border mx-1 shrink-0" />
                     <button
-                      onClick={() => { setSelectedLocations(new Set()); setSelectedCategories(new Set()); setFilterType("all"); }}
+                      onClick={() => { setSelectedLocations(new Set()); setSelectedCategories(new Set()); setFilterType("all"); setSelectedTrip(null); }}
                       className="px-2.5 py-1 rounded text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all whitespace-nowrap"
                     >
                       ✕ clear

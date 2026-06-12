@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "work.md",
+                "file": "bio.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "work"
+              "title": "bio"
             }
           }
         ]
@@ -185,6 +185,8 @@
   },
   "active": "4323dfdce54965a4",
   "lastOpenFiles": [
+    "travel.md",
+    "gear.md",
     "extras.md",
     "bio.md",
     "antigua.md",

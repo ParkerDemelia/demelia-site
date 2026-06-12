@@ -96,9 +96,9 @@ export default function HomePage() {
               {" · "}
               <Link href="/resume.pdf" className="hover:text-foreground transition-colors">resume</Link>
               {" · "}
-              <a href="https://www.parkerbuildsthings.com/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">builds</a>
-              {" · "}
-              <Link href="/antigua" className="hover:text-foreground transition-colors">visit antigua</Link>
+              <Link href="/gear" className="hover:text-foreground transition-colors">gear</Link>
+              {/* {" · "}
+              <Link href="/antigua" className="hover:text-foreground transition-colors">visit antigua</Link> */}
               {/* {" · "}
               <Link href="/trip-expenses" className="hover:text-foreground transition-colors">db marca</Link> */}
             </p>
