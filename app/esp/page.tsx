@@ -30,8 +30,8 @@ const markdownComponents: Components = {
   },
 }
 
-export default function WorkPage() {
-  const workMarkdown = readFileSync(join(process.cwd(), "content", "work.md"), "utf-8")
+export default function EspPage() {
+  const espMarkdown = readFileSync(join(process.cwd(), "content", "esp.md"), "utf-8")
 
   return (
     <div className="min-h-screen bg-background">
@@ -44,10 +44,10 @@ export default function WorkPage() {
           back
         </Link>
 
-        <h1 className="text-3xl font-bold text-foreground tracking-tight mb-2">work</h1>
-        <p className="text-sm text-muted-foreground mb-8">web design, apps, and social media</p>
+        <h1 className="text-3xl font-bold text-foreground tracking-tight mb-2">esp</h1>
+        <p className="text-sm text-muted-foreground mb-8">diario en español</p>
 
-        <ReactMarkdown components={markdownComponents}>{workMarkdown}</ReactMarkdown>
+        <ReactMarkdown components={markdownComponents}>{espMarkdown}</ReactMarkdown>
       </div>
     </div>
   )

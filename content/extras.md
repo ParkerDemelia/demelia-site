@@ -1,4 +1,6 @@
+[Watch the vlog](https://youtube.com/@parker.demelia)
 
+ADD TO TRAVEL
 
 Coming home from my backpacking trip has left me motivated to create. My commitment: build one thing every day until I make $10,000. I'll be posting my builds on [parkerbuildsthings.com](https://www.parkerbuildsthings.com/) and updating my financial progress [here](/locking-in).
 

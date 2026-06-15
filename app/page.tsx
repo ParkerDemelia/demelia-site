@@ -92,15 +92,15 @@ export default function HomePage() {
               Hey, I&apos;m Parker Demelia.
             </h1>
             <p className="text-muted-foreground mt-2 text-sm">
-              <Link href="/work" className="hover:text-foreground transition-colors">work</Link>
-              {" · "}
               <Link href="/resume.pdf" className="hover:text-foreground transition-colors">resume</Link>
               {" · "}
               <Link href="/gear" className="hover:text-foreground transition-colors">gear</Link>
+              {" · "}
+              <Link href="/expenses" className="hover:text-foreground transition-colors">expenses</Link>
+              {" · "}
+              <Link href="/travel" className="hover:text-foreground transition-colors">travel</Link>
               {/* {" · "}
               <Link href="/antigua" className="hover:text-foreground transition-colors">visit antigua</Link> */}
-              {/* {" · "}
-              <Link href="/trip-expenses" className="hover:text-foreground transition-colors">db marca</Link> */}
             </p>
           </div>
         </section>
