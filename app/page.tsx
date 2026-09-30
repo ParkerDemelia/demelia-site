@@ -94,6 +94,8 @@ export default function HomePage() {
             <p className="text-muted-foreground mt-2 text-sm">
               <Link href="/resume.pdf" className="hover:text-foreground transition-colors">resume</Link>
               {" · "}
+              <Link href="/work" className="hover:text-foreground transition-colors">work</Link>
+              {" · "}
               <Link href="/gear" className="hover:text-foreground transition-colors">gear</Link>
               {" · "}
               <Link href="/expenses" className="hover:text-foreground transition-colors">expenses</Link>
