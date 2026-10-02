@@ -21,3 +21,11 @@
 - [Whiteboard](https://amzn.to/4clAj5g) - For thinking out loud and mapping out projects.
 - [Creatine](https://amzn.to/3yuyS6E) - Part of my daily routine, home or away.
 - [Dr. Bronner's 18-in-1 Castile Soap](https://amzn.to/4vNRMNJ) - One bottle for body, laundry, and dishes on the road.
+
+## Van Build
+
+- [Renogy 30A DC-DC Dual Input Battery Charger](https://amzn.to/4hIzb0g) - Charges the house battery from the alternator while driving, plus solar input.
+- [Starlink Mini 12V Step-Up Adapter](https://amzn.to/4dh0tth) - Runs the Starlink Mini straight off the 12V system, no inverter needed.
+- [Shore Power AC Port](https://amzn.to/4y5mFxX) - Plug in at campgrounds or a driveway to charge up.
+- [Magcubic Projector](https://amzn.to/4z2LNpO) - Movie nights in the van.
+- [Vevor 8KW Diesel Heater](https://amzn.to/3Vkl0XL) - Keeps the van warm on cold nights.
