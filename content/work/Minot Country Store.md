@@ -1,5 +1,5 @@
 ---
-title: Freelance in Guatemala
+title: Minot Country Store
 summary: What a month abroad can do for freelance work.
 date: 2026-04-19
 role: Solo developer

@@ -1,55 +1,49 @@
-import { readFileSync } from "fs"
-import { join } from "path"
+import type { Metadata } from "next"
 import Link from "next/link"
+import { Caveat } from "next/font/google"
 import { ArrowLeft } from "lucide-react"
-import ReactMarkdown from "react-markdown"
-import type { Components } from "react-markdown"
+import { getGear } from "@/lib/gear"
+import { GearLinks } from "@/components/gear/gear-links"
 
-const linkClass = "text-primary underline hover:brightness-125"
+const hand = Caveat({ subsets: ["latin"], variable: "--font-hand" })
 
-const markdownComponents: Components = {
-  h2: ({ children }) => (
-    <h2 className="text-lg font-semibold text-foreground mt-8 first:mt-0 mb-3">{children}</h2>
-  ),
-  ul: ({ children }) => <ul className="space-y-2 mb-6">{children}</ul>,
-  li: ({ children }) => (
-    <li className="text-sm text-foreground/90">{children}</li>
-  ),
-  a: ({ href, children }) => {
-    if (!href) return <>{children}</>
-    const external = href.startsWith("http") || href.startsWith("mailto:")
-    return external ? (
-      <a href={href} target="_blank" rel="noopener noreferrer" className={linkClass}>
-        {children}
-      </a>
-    ) : (
-      <Link href={href} className={linkClass}>
-        {children}
-      </Link>
-    )
-  },
+export const metadata: Metadata = {
+  title: "gear — Parker Demelia",
+  description: "The travel, tech, and van gear I actually use and recommend.",
 }
 
+// Edit content/gear.md — see lib/gear.ts for the {HOT} / {$price} / ![[photo]] syntax.
 export default function GearPage() {
-  const gearMarkdown = readFileSync(join(process.cwd(), "content", "gear.md"), "utf-8")
+  const sections = getGear()
+  const count = sections.reduce((n, s) => n + s.items.length, 0)
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8 max-w-3xl">
+    <div className={`${hand.variable} min-h-screen bg-background`}>
+      <div className="container mx-auto max-w-md px-4 py-8">
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
+          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           back
         </Link>
 
-        <h1 className="text-3xl font-bold text-foreground tracking-tight mb-2">gear</h1>
-        <p className="text-sm text-muted-foreground mb-8">the travel gear I actually use and recommend</p>
+        <header className="mt-4 flex flex-col items-center text-center">
+          <div className="h-24 w-24 overflow-hidden rounded-full border-4 border-background bg-muted shadow-md ring-2 ring-primary/60">
+            <img src="/park.png" alt="Parker Demelia" className="h-full w-full object-cover" />
+          </div>
+          <h1 className="mt-4 text-2xl font-bold tracking-tight text-foreground">parker&apos;s gear</h1>
+          <p className="mt-1 text-sm text-muted-foreground">the travel gear I actually use and recommend</p>
+          <p className="journe-hand mt-3 -rotate-2 text-lg leading-none text-primary">
+            {count} things I&apos;d buy again ↓
+          </p>
+        </header>
 
-        <ReactMarkdown components={markdownComponents}>{gearMarkdown}</ReactMarkdown>
+        <div className="mt-6">
+          <GearLinks sections={sections} />
+        </div>
 
-        <p className="text-xs text-muted-foreground mt-12 border-t border-border pt-6">
+        <p className="mt-12 border-t border-border pt-6 text-center text-xs text-muted-foreground">
           As an Amazon Associate I earn from qualifying purchases. Links on this page may be
           affiliate links — it costs you nothing extra and helps support the site.
         </p>

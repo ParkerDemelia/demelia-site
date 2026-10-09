@@ -97,6 +97,8 @@ export default function HomePage() {
               <Link href="/gear" className="hover:text-foreground transition-colors">gear</Link>
               {" · "}
               <Link href="/expenses" className="hover:text-foreground transition-colors">expenses</Link>
+              {" · "}
+              <Link href="/journe" className="hover:text-foreground transition-colors">journe</Link>
               {/* {" · "}
               <Link href="/antigua" className="hover:text-foreground transition-colors">visit antigua</Link> */}
             </p>
