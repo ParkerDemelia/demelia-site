@@ -4,7 +4,7 @@ import { useState } from "react"
 import { formatAmount } from "@/components/trip-expenses-widget"
 import { useJourne } from "./journe-context"
 import { SectionLabel } from "./section-label"
-import { useInView } from "./stat-strip"
+import { useInView } from "./use-in-view"
 
 const PREVIEW_LINES = 8
 const PAPER = "oklch(0.96 0.012 90)"

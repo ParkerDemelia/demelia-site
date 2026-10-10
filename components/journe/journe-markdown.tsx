@@ -5,6 +5,7 @@ import Link from "next/link"
 import ReactMarkdown from "react-markdown"
 import type { Components } from "react-markdown"
 import { Polaroid } from "./journe-context"
+import { InlineStat, StatValue } from "./inline-stat"
 import { Stamp, stampCaption } from "./stamp"
 
 const linkClass = "text-primary underline hover:brightness-125"
@@ -25,13 +26,24 @@ function PriceTag({ children }: { children: React.ReactNode }) {
 }
 
 const markdownComponents: Components = {
-  // Stamps sharing a paragraph float together as one row, in the order they were written
-  // (separate right-floats would line up backwards).
+  // Stamps sharing a paragraph stay together as one row, in the order they were written
+  // (separate right-floats would line up backwards). With text around them, the row floats.
   p: ({ children }) => {
     const pClass = "text-[15px] leading-relaxed text-foreground/90 mb-4"
     const kids = Children.toArray(children)
     const stamps = kids.filter(isStampImage)
     if (stamps.length < 2) return <p className={pClass}>{children}</p>
+    const rest = kids.filter((k) => !isStampImage(k))
+    // a paragraph of nothing but stamps → its own row, so text below isn't squeezed beside it
+    if (rest.every((k) => typeof k === "string" && !k.trim())) {
+      return (
+        <div className="my-5 flex flex-wrap justify-center gap-x-6 gap-y-4">
+          {stamps.map((el: any) => (
+            <Stamp key={el.key} src={el.props.src} caption={stampCaption(el.props.alt) || undefined} grouped />
+          ))}
+        </div>
+      )
+    }
     return (
       <p className={pClass}>
         <span className="float-right ml-4 mb-3 mt-1 flex max-w-[75%] flex-wrap justify-end gap-x-4 gap-y-3">
@@ -39,7 +51,7 @@ const markdownComponents: Components = {
             <Stamp key={el.key} src={el.props.src} caption={stampCaption(el.props.alt) || undefined} grouped />
           ))}
         </span>
-        {kids.filter((k) => !isStampImage(k))}
+        {rest}
       </p>
     )
   },
@@ -56,6 +68,8 @@ const markdownComponents: Components = {
   },
   a: ({ href, children }) => {
     if (href === "#price") return <PriceTag>{children}</PriceTag>
+    if (href === "#stat-value") return <StatValue>{children}</StatValue>
+    if (href?.startsWith("#stat:")) return <InlineStat name={href.slice(6)} />
     if (!href) return <>{children}</>
     const external = href.startsWith("http") || href.startsWith("mailto:")
     return external ? (

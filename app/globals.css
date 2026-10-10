@@ -210,9 +210,29 @@
 .journe-reveal.is-in { opacity: 1; transform: none; }
 
 .journe-list > li { position: relative; padding-left: 1.4rem; }
-.journe-list > li::before { content: "🛞"; position: absolute; left: 0; font-size: 0.8em; top: 0.2em; }
+.journe-list > li::before {
+  content: "";
+  position: absolute;
+  left: 0.25rem;
+  top: 0.62em;
+  width: 5px;
+  height: 5px;
+  border-radius: 1px;
+  background: var(--secondary);
+  opacity: 0.7;
+}
 .journe-list .journe-list > li::before,
-.journe-list ul > li::before { content: "↳"; font-size: 0.9em; top: 0; color: var(--muted-foreground); }
+.journe-list ul > li::before {
+  content: "↳";
+  width: auto;
+  height: auto;
+  left: 0;
+  top: 0;
+  background: none;
+  opacity: 1;
+  font-size: 0.9em;
+  color: var(--muted-foreground);
+}
 .journe-list ul > li { position: relative; padding-left: 1.2rem; }
 
 .journe-receipt { transform: translateY(-100%); transition: transform 1.6s steps(24, end); }
@@ -374,3 +394,26 @@
   .gear-tag, .gear-card { transition: none; }
   .gear-tag-hot svg { animation: none; }
 }
+
+/* small inline flip cards for {totalcost} etc. */
+.journe-flip-sm {
+  width: 0.95rem;
+  height: 1.4rem;
+  font-size: 0.85rem;
+  perspective: 120px;
+}
+.journe-flip-sm .journe-flap-top { border-radius: 2px 2px 0 0; }
+.journe-flip-sm .journe-flap-bottom { border-radius: 0 0 2px 2px; }
+
+/* trip ticket stub: notches punched in both ends */
+.journe-stub {
+  border-radius: 6px;
+  -webkit-mask:
+    radial-gradient(circle 6px at left center, #0000 97%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle 6px at right center, #0000 97%, #000) right / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle 6px at left center, #0000 97%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle 6px at right center, #0000 97%, #000) right / 51% 100% no-repeat;
+}
+.journe-stub > div:first-child { padding-left: 1.25rem; }
+.journe-stub > div:last-child { padding-right: 1.25rem; }

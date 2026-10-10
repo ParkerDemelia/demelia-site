@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef, useState } from "react"
-import { useInView } from "./stat-strip"
+import { useInView } from "./use-in-view"
 import { VanSide } from "./van-art"
 
 // Two short square-wave beeps. Only ever runs from a click, so autoplay rules are fine.

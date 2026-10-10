@@ -17,7 +17,10 @@ function isVanExpense(e: Expense) {
     .some((c) => c.trim() === "van")
 }
 
+export type Totals = { miles: number; odometerStart: number; bought?: string }
+
 type JourneContextValue = {
+  totals: Totals
   vanExpenses: Expense[]
   vanSpend: number
   loading: boolean
@@ -40,9 +43,11 @@ export const PURCHASE_ID = "van-purchase"
 export function JourneProvider({
   children,
   purchase,
+  totals,
 }: {
   children: React.ReactNode
   purchase?: { date: string; amount: number }
+  totals: Totals
 }) {
   const { allExpenses, loading, error } = useExpenses()
   const [viewer, setViewer] = useState<{ items: Media[]; index: number } | null>(null)
@@ -97,7 +102,7 @@ export function JourneProvider({
   const arrow = "absolute top-1/2 -translate-y-1/2 z-10 rounded-full bg-white/10 p-2 text-white hover:bg-white/25"
 
   return (
-    <JourneContext.Provider value={{ vanExpenses, vanSpend, loading, error, openMedia }}>
+    <JourneContext.Provider value={{ totals, vanExpenses, vanSpend, loading, error, openMedia }}>
       {children}
       {open && viewer && (
         <div

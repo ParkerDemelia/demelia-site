@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import type { Entry } from "@/lib/journe"
 import { JourneMarkdown } from "./journe-markdown"
 import { EntryDateContext } from "./stamp"
-import { useInView } from "./stat-strip"
+import { useInView } from "./use-in-view"
 import { VanFront } from "./van-art"
 
 const RAIL = 64 // width of the road column on the left
@@ -44,6 +44,37 @@ function roadPath(height: number) {
   return d
 }
 
+// Ticket-stub summary at the end of an entry: "@ place" from the date line, {miles: N}, {spent: N}.
+function TripStub({ entry }: { entry: Entry }) {
+  const cells: [string, string][] = []
+  if (entry.place) cells.push(["where", `@ ${entry.place}`])
+  if (entry.miles != null) cells.push(["miles", entry.miles.toLocaleString()])
+  if (entry.spent != null)
+    cells.push(["spent", `$${entry.spent.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`])
+  return (
+    <div className="clear-both pt-1">
+      {/* phones: place on its own row above a dashed tear; wider: one row */}
+      <div className="journe-stub inline-flex max-w-full flex-wrap items-stretch bg-card sm:flex-nowrap">
+        {cells.map(([label, value], i) => {
+          const where = label === "where"
+          const divider = i === 0 ? "" : i === 1 && cells[0][0] === "where" ? "sm:border-l" : "border-l"
+          return (
+            <div
+              key={label}
+              className={`px-3 py-2 sm:px-4 border-dashed border-muted-foreground/40 ${divider} ${
+                where ? "basis-full border-b sm:basis-auto sm:border-b-0" : ""
+              }`}
+            >
+              <div className="text-[9px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">{label}</div>
+              <div className={`font-mono text-sm tabular-nums text-foreground ${where ? "uppercase" : "whitespace-nowrap"}`}>{value}</div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 function EntryBlock({ entry, reached, current }: { entry: Entry; reached: boolean; current: boolean }) {
   const { ref, inView } = useInView<HTMLElement>(0.1)
   return (
@@ -56,16 +87,17 @@ function EntryBlock({ entry, reached, current }: { entry: Entry; reached: boolea
             } ${current ? "ring-2 ring-secondary/40 ring-offset-2 ring-offset-background" : ""}`}
           >
             {entry.date}
+            {entry.dateEnd && `–${entry.dateEnd}`}
           </span>
         )}
         {entry.title && <h3 className="text-lg font-semibold leading-7 tracking-tight text-foreground">{entry.title}</h3>}
-        {entry.place && <span className="text-xs text-muted-foreground">📍 {entry.place}</span>}
       </header>
       {entry.content && (
         <EntryDateContext.Provider value={entry.date}>
           <JourneMarkdown>{entry.content}</JourneMarkdown>
         </EntryDateContext.Provider>
       )}
+      {(entry.place || entry.miles != null || entry.spent != null) && <TripStub entry={entry} />}
     </article>
   )
 }
@@ -193,7 +225,7 @@ export function JournalRoad({ intro, entries, odometerStart }: { intro: string; 
           <EntryBlock key={i} entry={e} reached={i < reachedCount} current={i === reachedCount - 1} />
         ))}
 
-        <p className="pb-2 text-lg text-muted-foreground journe-hand">to be continued… 🚐💨</p>
+        <p className="pb-2 text-lg text-muted-foreground journe-hand">to be continued…</p>
       </div>
     </section>
   )

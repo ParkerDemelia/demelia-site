@@ -10,7 +10,7 @@ export function PolaroidGallery({ items }: { items: Media[] }) {
       <SectionLabel>the camera roll</SectionLabel>
       {items.length === 0 ? (
         <div className="journe-polaroid mx-auto block w-56 bg-[oklch(0.97_0.01_90)] p-2 pb-1 shadow-lg shadow-black/40" style={{ "--tilt": "-3deg" } as React.CSSProperties}>
-          <div className="flex aspect-[4/3] items-center justify-center bg-neutral-800 text-4xl">📸</div>
+          <div className="aspect-[4/3] bg-neutral-800" />
           <p className="px-1 pt-1.5 pb-1 text-center text-[13px] text-neutral-700 journe-hand">photos developing…</p>
         </div>
       ) : (

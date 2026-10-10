@@ -5,7 +5,6 @@ import { ArrowLeft } from "lucide-react"
 import { getJourne } from "@/lib/journe"
 import { JourneProvider } from "@/components/journe/journe-context"
 import { JourneTitle, VanBreak } from "@/components/journe/van-hero"
-import { StatStrip } from "@/components/journe/stat-strip"
 import { JournalRoad } from "@/components/journe/journal-road"
 import { VanReceipt } from "@/components/journe/van-receipt"
 import { PolaroidGallery } from "@/components/journe/polaroid-gallery"
@@ -20,11 +19,13 @@ export const metadata: Metadata = {
 // Edit content/journe.md — frontmatter drives gallery/odometer, the body is the journal.
 export default function JournePage() {
   const journe = getJourne()
-  const miles = Math.max(0, journe.odometerNow - journe.odometerStart)
 
   return (
     <div className={`${hand.variable} min-h-screen bg-background overflow-x-hidden`}>
-      <JourneProvider purchase={journe.bought && journe.price ? { date: journe.bought, amount: journe.price } : undefined}>
+      <JourneProvider
+        purchase={journe.bought && journe.price ? { date: journe.bought, amount: journe.price } : undefined}
+        totals={{ miles: journe.totalMiles, odometerStart: journe.odometerStart, bought: journe.bought }}
+      >
         <div className="container mx-auto px-4 py-8 max-w-2xl">
           <Link
             href="/"
@@ -35,10 +36,9 @@ export default function JournePage() {
           </Link>
 
           <JourneTitle van={journe.van} />
-          <StatStrip miles={miles} entries={journe.entries.length} startDate={journe.bought} />
           <JournalRoad intro={journe.intro} entries={journe.entries} odometerStart={journe.odometerStart} />
           <VanBreak odometer={journe.odometerNow} />
-          <VanReceipt miles={miles} />
+          <VanReceipt miles={journe.totalMiles} />
           <PolaroidGallery items={journe.gallery} />
         </div>
       </JourneProvider>
