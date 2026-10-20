@@ -14,3 +14,5 @@ This LiFePo4 battery meant I needed a new DC-DC charger, so I went with the Reno
 
 - Bought 15a shore power port for van exterior
 - 2x 12v USB-C hubs
+
+starlink

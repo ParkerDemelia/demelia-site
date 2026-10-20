@@ -1,9 +1,10 @@
 ## Web Design
 
-- [Hotel Terra Maya](https://www.hotelterramaya.com/) — Full website design and development for a boutique hotel in Guatemala.
-- [3 Hermanos](http://3hermanosantigua.com/) — Website for a tour agency in Antigua, Guatemala.
-- [Keep It Clean HP](https://keepitcleanhp.com/) - Wordpress implementation for a Heat Pump cleaning business in Coastal Maine. 
-- [Mission Monte Líbano](https://montelibano.vercel.app/) - Website for a Mission church working for the interest of the Lord. 
+- [Hotel Terra Maya](https://www.hotelterramaya.com/) — Boutique hotel in Guatemala.
+- [3 Hermanos](http://3hermanosantigua.com/) — Tour agency in Antigua, Guatemala.
+- [Keep It Clean HP](https://keepitcleanhp.com/) - Heat Pump cleaning business in Coastal Maine. 
+- [Mission Monte Líbano](https://antiguamission.net/) - Mission church working for the interest of the Lord. 
+-  [Minot Country Store](http://minotcountrystore.com/) — Local convenience store store.
 
 
 ## Apps & Fun Projects

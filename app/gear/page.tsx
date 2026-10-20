@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 // Edit content/gear.md — see lib/gear.ts for the {HOT} / {$price} / ![[photo]] syntax.
 export default function GearPage() {
   const sections = getGear()
-  const count = sections.reduce((n, s) => n + s.items.length, 0)
+  const count = sections.reduce((n, s) => n + (s.kind === "socials" ? 0 : s.items.length), 0)
 
   return (
     <div className={`${hand.variable} min-h-screen bg-background`}>
@@ -45,7 +45,8 @@ export default function GearPage() {
 
         <p className="mt-12 border-t border-border pt-6 text-center text-xs text-muted-foreground">
           As an Amazon Associate I earn from qualifying purchases. Links on this page may be
-          affiliate links — it costs you nothing extra and helps support the site.
+          affiliate links — it costs you nothing extra and helps support the site. Anything marked
+          &ldquo;sponsored&rdquo; is a brand that pays me or gives me a code to share.
         </p>
       </div>
     </div>

@@ -1,0 +1,1 @@
+I'm Parker, a [CS grad](http://thomas.edu/) who designs and builds websites, films and edits video, and makes social content for businesses and organizations. When I'm not building, I'm [traveling](/travel), cliff jumping, or drafting the next idea in a coffee shop.
