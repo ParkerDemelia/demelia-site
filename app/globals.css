@@ -539,3 +539,59 @@
   transition: transform 0.2s ease;
 }
 .bio-sticker:hover > span { transform: scale(1.08); }
+
+/* ── /about ──────────────────────────────────────────── */
+/* site links: letters hop in a wave on hover (same motion as the journe title) */
+.wave-link:hover .wave-letter,
+.wave-link:focus-visible .wave-letter {
+  animation: journe-letter 0.45s ease-out both;
+  animation-delay: calc(var(--i) * 40ms);
+  color: var(--secondary);
+}
+
+/* Work bento: each row is a flex strip; the hovered tile grows, its row-mates shrink.
+   --w is the tile's resting width (1, or 2 for size: wide), --c the group color. */
+.bento-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.bento-tile {
+  --w: 1;
+  min-width: 0;
+  min-height: 7rem;
+  border: 1px solid color-mix(in oklch, var(--c) 22%, var(--border));
+  border-radius: var(--radius);
+  background: color-mix(in oklch, var(--c) 6%, var(--card));
+  transition:
+    flex-grow 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+.bento-tile:hover,
+.bento-tile:focus-within {
+  border-color: var(--c);
+  background: color-mix(in oklch, var(--c) 11%, var(--card));
+}
+.bento-desc { transition: opacity 0.25s ease; }
+
+@media (min-width: 640px) {
+  .bento-row { flex-direction: row; height: 9rem; }
+  .bento-tile { flex: var(--w) 1 0%; min-height: 0; }
+}
+@media (min-width: 640px) and (hover: hover) {
+  .bento-row:hover .bento-tile { flex-grow: calc(var(--w) * 0.8); }
+  .bento-row .bento-tile:hover { flex-grow: calc(var(--w) * 2.2); }
+  .bento-row:hover .bento-tile:not(:hover) .bento-desc { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wave-link:hover .wave-letter, .wave-link:focus-visible .wave-letter { animation: none; }
+  .bento-tile { transition: border-color 0.2s ease, background-color 0.2s ease; }
+}
+
+/* avatar story viewer */
+@keyframes story-progress { from { width: 0; } to { width: 100%; } }
+.story-progress { animation: story-progress var(--d, 5s) linear forwards; }
+.story-fade-in { animation: journe-fade-in 0.2s ease-out; }
+.story-pop-in { animation: journe-pop-in 0.25s ease-out; }

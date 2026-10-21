@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { notFound } from "next/navigation"
 import { Caveat, Instrument_Serif } from "next/font/google"
 import { ArrowLeft, ArrowUpRight, FileText, Mail } from "lucide-react"
 import { getResume, type WorkSection } from "@/lib/resume"
@@ -11,6 +12,7 @@ const serif = Instrument_Serif({ subsets: ["latin"], weight: "400", style: ["nor
 export const metadata: Metadata = {
   title: "bio — Parker Demelia",
   description: "A techie, a creative, a traveler. The resume cover version.",
+  robots: { index: false, follow: false },
 }
 
 const EMAIL = "parker.demelia@gmail.com"
@@ -120,7 +122,9 @@ function WorkList({ section }: { section: WorkSection }) {
 }
 
 // Edit content/resume.md — clients + projects come from content/work.md.
+// Draft: only viewable with `npm run dev` — 404s on the live site.
 export default function BioPage() {
+  if (process.env.NODE_ENV === "production") notFound()
   const r = getResume()
   const clients = r.work.filter((s) => !/project/i.test(s.title))
   const projects = r.work.filter((s) => /project/i.test(s.title))

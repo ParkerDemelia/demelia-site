@@ -1,8 +1,8 @@
-import { readFileSync } from "fs"
+import { existsSync, readFileSync } from "fs"
 import { join } from "path"
 import matter from "gray-matter"
 
-// /bio reads content/resume.md (frontmatter) plus the lists in content/work.md.
+// /bio reads content/resume.md (or content/archive/resume.md) plus the lists in content/work.md.
 const CONTENT_DIR = join(process.cwd(), "content")
 
 type Linkable = { link?: string }
@@ -28,7 +28,9 @@ const ITEM = /^-\s+(?:\[([^\]]+)\]\(([^)]+)\)|([^—–]+?))(?:\s+[—–-]\s+(.
 
 function parseWorkList(markdown: string): WorkSection[] {
   const sections: WorkSection[] = []
-  for (const line of markdown.split("\n").map((l) => l.trim())) {
+  // %% Obsidian comments %% are hidden — use them to park items without deleting them
+  const visible = markdown.replace(/%%[\s\S]*?%%/g, "")
+  for (const line of visible.split("\n").map((l) => l.trim())) {
     if (line.startsWith("## ")) {
       sections.push({ title: line.slice(3).trim(), items: [] })
       continue
@@ -51,7 +53,8 @@ export function getWorkList(): WorkSection[] {
 }
 
 export function getResume(): Resume {
-  const { data } = matter(readFileSync(join(CONTENT_DIR, "resume.md"), "utf-8"))
+  const path = [join(CONTENT_DIR, "resume.md"), join(CONTENT_DIR, "archive", "resume.md")].find((p) => existsSync(p))
+  const { data } = path ? matter(readFileSync(path, "utf-8")) : { data: {} as Record<string, any> }
   const work = getWorkList()
   return {
     tagline: data.tagline ?? "",

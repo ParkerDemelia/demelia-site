@@ -1,4 +1,4 @@
-import { readFileSync } from "fs"
+import { existsSync, readFileSync } from "fs"
 import { join } from "path"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
@@ -31,7 +31,8 @@ const markdownComponents: Components = {
 }
 
 export default function EspPage() {
-  const espMarkdown = readFileSync(join(process.cwd(), "content", "esp.md"), "utf-8")
+  const file = [join(process.cwd(), "content", "esp.md"), join(process.cwd(), "content", "archive", "esp.md")].find((p) => existsSync(p))
+  const espMarkdown = file ? readFileSync(file, "utf-8") : ""
 
   return (
     <div className="min-h-screen bg-background">
