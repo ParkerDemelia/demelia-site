@@ -135,8 +135,9 @@ export function VanSide() {
             {[0, 72, 144, 216, 288].map((a) => (
               <circle
                 key={a}
-                cx={cx + 4 * Math.cos((a * Math.PI) / 180)}
-                cy={78 + 4 * Math.sin((a * Math.PI) / 180)}
+                // rounded so server and browser print the same number (avoids a hydration warning)
+                cx={(cx + 4 * Math.cos((a * Math.PI) / 180)).toFixed(2)}
+                cy={(78 + 4 * Math.sin((a * Math.PI) / 180)).toFixed(2)}
                 r="0.9"
                 fill="oklch(0.5 0 0)"
               />

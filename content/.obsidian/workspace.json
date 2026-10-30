@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "gear.md",
+                "file": "work.md",
                 "mode": "source",
-                "source": true
+                "source": false
               },
               "icon": "lucide-file",
-              "title": "gear"
+              "title": "work"
             }
           }
         ]
@@ -187,19 +187,21 @@
   },
   "active": "4323dfdce54965a4",
   "lastOpenFiles": [
+    "attachments/antigua.jpeg",
+    "attachments/gear.jpeg",
+    "journe.md",
     "antigua.md",
+    "build.md",
     "about.md",
+    "travel.md",
+    "gear.md",
     "attachments/travel.jpeg",
     "attachments/me.jpeg",
     "work.md",
     "archive/bio.md",
-    "gear.md",
-    "travel.md",
     "archive/resume.md",
-    "journe.md",
     "story.md",
     "projects.md",
-    "build.md",
     "archive/esp.md",
     "archive/extras.md",
     "archive",
@@ -210,7 +212,6 @@
     "attachments/jugs.jpeg",
     "attachments/panel.jpeg",
     "attachments/wires.jpeg",
-    "attachments/starlink.jpeg",
     "attachments",
     "work/Keep It Clean Heat Pumps.md",
     "work/Guatemala.md",

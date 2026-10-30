@@ -1,1 +1,1 @@
-Hola, me llamo Parker. Quiero apprender mas, entonces, estoy aqui escriberando 
+Hola, me llamo Parker. Quiero aprender más, entonces, estoy aquí escribiendo. 

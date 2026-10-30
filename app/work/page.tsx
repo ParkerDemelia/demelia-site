@@ -2,6 +2,8 @@ import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import { getCaseStudies } from "@/lib/work"
 
+export const metadata = { title: "work — Parker Demelia" }
+
 // Add a case study by dropping a markdown file in content/work/ (see content/work/_template.md)
 export default function WorkPage() {
   const studies = getCaseStudies()

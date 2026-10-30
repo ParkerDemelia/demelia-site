@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { Caveat } from "next/font/google"
-import { ArrowLeft } from "lucide-react"
 import { getGear } from "@/lib/gear"
 import { GearLinks } from "@/components/gear/gear-links"
+import { SiteHeader } from "@/components/site-header"
+import { SiteFooter } from "@/components/site-footer"
 
 const hand = Caveat({ subsets: ["latin"], variable: "--font-hand" })
 
@@ -19,22 +19,13 @@ export default function GearPage() {
 
   return (
     <div className={`${hand.variable} min-h-screen bg-background`}>
-      <div className="container mx-auto max-w-md px-4 py-8">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <ArrowLeft className="h-3.5 w-3.5" />
-          back
-        </Link>
+      <main className="mx-auto max-w-2xl px-4 py-12 sm:py-16">
+        <SiteHeader active="explore" />
 
-        <header className="mt-4 flex flex-col items-center text-center">
-          <div className="h-24 w-24 overflow-hidden rounded-full border-4 border-background bg-muted shadow-md ring-2 ring-primary/60">
-            <img src="/park.png" alt="Parker Demelia" className="h-full w-full object-cover" />
-          </div>
-          <h1 className="mt-4 text-2xl font-bold tracking-tight text-foreground">parker&apos;s gear</h1>
-          <p className="mt-1 text-sm text-muted-foreground">the travel gear I actually use and recommend</p>
-          <p className="journe-hand mt-3 -rotate-2 text-lg leading-none text-primary">
+        <header>
+          <h1 className="text-5xl font-bold tracking-tight text-foreground sm:text-6xl">gear</h1>
+          <p className="mt-2 text-sm text-muted-foreground">the travel gear I actually use and recommend</p>
+          <p className="journe-hand mt-3 -rotate-2 text-xl leading-none text-primary">
             {count} things I&apos;d buy again ↓
           </p>
         </header>
@@ -43,12 +34,14 @@ export default function GearPage() {
           <GearLinks sections={sections} />
         </div>
 
-        <p className="mt-12 border-t border-border pt-6 text-center text-xs text-muted-foreground">
+        <p className="mt-12 text-xs text-muted-foreground">
           As an Amazon Associate I earn from qualifying purchases. Links on this page may be
           affiliate links — it costs you nothing extra and helps support the site. Anything marked
           &ldquo;sponsored&rdquo; is a brand that pays me or gives me a code to share.
         </p>
-      </div>
+
+        <SiteFooter />
+      </main>
     </div>
   )
 }

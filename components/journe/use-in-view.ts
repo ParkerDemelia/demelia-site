@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react"
 
-export function useInView<T extends Element>(threshold = 0.3) {
+// rootMargin grows the trigger area, e.g. "0px 0px 25% 0px" fires a quarter screen before the element scrolls in
+export function useInView<T extends Element>(threshold = 0.3, rootMargin = "0px") {
   const ref = useRef<T>(null)
   const [inView, setInView] = useState(false)
   useEffect(() => {
@@ -13,9 +14,9 @@ export function useInView<T extends Element>(threshold = 0.3) {
         setInView(true)
         io.disconnect()
       }
-    }, { threshold })
+    }, { threshold, rootMargin })
     io.observe(el)
     return () => io.disconnect()
-  }, [threshold])
+  }, [threshold, rootMargin])
   return { ref, inView }
 }
