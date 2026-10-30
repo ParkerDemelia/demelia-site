@@ -5,6 +5,8 @@ import { ArrowLeft } from "lucide-react"
 import ReactMarkdown from "react-markdown"
 import type { Components } from "react-markdown"
 
+export const metadata = { title: "esp — Parker Demelia" }
+
 const linkClass = "text-primary underline hover:brightness-125"
 
 const markdownComponents: Components = {

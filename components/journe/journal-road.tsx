@@ -76,7 +76,7 @@ function TripStub({ entry }: { entry: Entry }) {
 }
 
 function EntryBlock({ entry, reached, current }: { entry: Entry; reached: boolean; current: boolean }) {
-  const { ref, inView } = useInView<HTMLElement>(0.1)
+  const { ref, inView } = useInView<HTMLElement>(0, "0px 0px 25% 0px")
   return (
     <article ref={ref} data-entry className={`journe-reveal ${inView ? "is-in" : ""} flow-root pb-12`}>
       <header className="mb-2 flex min-h-7 flex-wrap items-center gap-x-2 gap-y-1">

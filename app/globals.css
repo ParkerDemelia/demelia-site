@@ -4,14 +4,14 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Updated color palette for minimalistic design with cyan primary and lime accent */
+  /* Minimal palette; the primary is the warm price-tag yellow from /journe and /gear */
   --background: oklch(1 0 0); /* Pure white */
   --foreground: oklch(0.35 0 0); /* Dark gray for text */
   --card: oklch(0.98 0 0); /* Light gray for cards */
   --card-foreground: oklch(0.35 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.35 0 0);
-  --primary: oklch(0.6 0.15 200); /* Cyan-600 equivalent */
+  --primary: oklch(0.6 0.13 70); /* deep amber, readable on white */
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.75 0.15 120); /* Lime green accent */
   --secondary-foreground: oklch(1 0 0);
@@ -23,7 +23,7 @@
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.92 0 0);
   --input: oklch(0.98 0 0);
-  --ring: oklch(0.6 0.15 200);
+  --ring: oklch(0.6 0.13 70);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -37,7 +37,7 @@
   --sidebar-accent: oklch(0.75 0.15 120);
   --sidebar-accent-foreground: oklch(1 0 0);
   --sidebar-border: oklch(0.92 0 0);
-  --sidebar-ring: oklch(0.6 0.15 200);
+  --sidebar-ring: oklch(0.6 0.13 70);
 }
 
 .dark {
@@ -47,9 +47,9 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.145 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.7 0.15 200);
-  /* Fixed contrast by using white text on primary buttons in dark mode */
-  --primary-foreground: oklch(1 0 0);
+  --primary: oklch(0.86 0.15 88);
+  /* the yellow is light, so text on primary buttons is near-black */
+  --primary-foreground: oklch(0.17 0 0);
   --secondary: oklch(0.8 0.15 120);
   --secondary-foreground: oklch(0.145 0 0);
   --muted: oklch(0.269 0 0);
@@ -60,7 +60,7 @@
   --destructive-foreground: oklch(0.637 0.237 25.331);
   --border: oklch(0.269 0 0);
   --input: oklch(0.269 0 0);
-  --ring: oklch(0.439 0 0);
+  --ring: oklch(0.86 0.15 88);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -356,6 +356,11 @@
 }
 .journe-price:hover { transform: rotate(3deg) scale(1.08); }
 
+/* ── /explore ──────────────────────────────────────── */
+/* page-card art sits still until hovered */
+.explore-page .journe-wheel { animation-play-state: paused; }
+.explore-page:hover .journe-wheel { animation-play-state: running; }
+
 /* ── /gear ───────────────────────────────────────────── */
 /* {HOT} / {FAVORITE} / {NEW} stickers — same hang-tag shape as .journe-price */
 .gear-tag {
@@ -595,3 +600,48 @@
 .story-progress { animation: story-progress var(--d, 5s) linear forwards; }
 .story-fade-in { animation: journe-fade-in 0.2s ease-out; }
 .story-pop-in { animation: journe-pop-in 0.25s ease-out; }
+
+/* full Substack posts on /blog/[slug] — the HTML comes from the feed, so it's styled here */
+.post-body { font-size: 17px; line-height: 1.75; color: color-mix(in oklch, var(--foreground) 85%, transparent); }
+.post-body > * + * { margin-top: 1.25em; }
+.post-body h2, .post-body h3, .post-body h4 { margin-top: 2em; font-weight: 600; color: var(--foreground); }
+.post-body h2 { font-size: 1.35em; }
+.post-body h3 { font-size: 1.15em; }
+.post-body a { color: var(--foreground); text-decoration: underline; text-decoration-color: var(--border); text-underline-offset: 4px; }
+.post-body a:hover { color: var(--primary); text-decoration-color: var(--primary); }
+.post-body blockquote { border-left: 2px solid var(--primary); padding-left: 1rem; color: var(--foreground); font-style: italic; }
+.post-body blockquote > * + * { margin-top: 0.5em; }
+.post-body ul, .post-body ol { padding-left: 1.25rem; }
+.post-body ul { list-style: disc; }
+.post-body ol { list-style: decimal; }
+.post-body li + li { margin-top: 0.35em; }
+.post-body figure { margin: 2em 0; }
+.post-body img { width: 100%; height: auto; border-radius: 0.5rem; }
+.post-body figcaption { margin-top: 0.5rem; font-size: 0.85em; color: var(--muted-foreground); }
+.post-body hr { border: 0; border-top: 1px solid var(--border); margin: 2.5em 0; }
+
+/* Supascribe subscribe form (components/subscribe-form.tsx) — overrides the dashboard theme so it matches the site */
+.subscribe-embed .custom-substack-widget { font-family: inherit !important; margin: 0 !important; max-width: none !important; border: 0 !important; background: none !important; padding: 0 !important; box-shadow: none !important; }
+.subscribe-embed .csw-container { display: flex !important; flex-wrap: wrap; gap: 0.5rem !important; background: none !important; border: 0 !important; padding: 0 !important; box-shadow: none !important; }
+.subscribe-embed .csw-container > div:first-child { flex: 1 1 14rem !important; min-width: 0; }
+.subscribe-embed .csw-container > div:last-child { flex: 0 0 auto !important; width: auto !important; }
+@media (max-width: 479px) {
+  .subscribe-embed .csw-container > div:last-child, .subscribe-embed button[type="submit"] { flex-basis: 100% !important; width: 100% !important; }
+}
+.subscribe-embed input[type="email"] {
+  width: 100% !important; height: auto !important; box-sizing: border-box;
+  border: 1px solid var(--border) !important; border-radius: 9999px !important;
+  background: var(--background) !important; color: var(--foreground) !important;
+  padding: 0.5rem 1rem !important; font-size: 0.875rem !important; line-height: 1.25rem !important;
+  box-shadow: none !important; outline: none;
+}
+.subscribe-embed input[type="email"]::placeholder { color: var(--muted-foreground) !important; }
+.subscribe-embed input[type="email"]:focus { border-color: color-mix(in oklch, var(--foreground) 40%, transparent) !important; }
+.subscribe-embed button[type="submit"] {
+  height: auto !important; border: 0 !important; border-radius: 9999px !important;
+  background: var(--foreground) !important; color: var(--background) !important;
+  padding: 0.5rem 1rem !important; font-size: 0.875rem !important; line-height: 1.25rem !important; font-weight: 500 !important;
+  cursor: pointer; transition: opacity 0.2s ease;
+}
+.subscribe-embed button[type="submit"]:hover { opacity: 0.85; }
+.subscribe-embed button[type="submit"]:disabled { opacity: 0.6; cursor: default; }

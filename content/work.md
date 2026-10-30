@@ -1,7 +1,8 @@
 ## Client Work
 
 - [Hotel Terra Maya](https://www.hotelterramaya.com/) - Lodging display for a Guatemalan Hotel.
-- [3 Hermanos](http://3hermanosantigua.com/) - Booking site for a tour agency in Antigua, Maine.
+- [JuegaEspanol!](https://www.juegaespanol.com/) - Spanish Learning & Classroom management platform
+- [3 Hermanos](http://3hermanosantigua.com/) - Booking site for a tour agency in Antigua, Guatemala.
 - [Keep It Clean HP](https://keepitcleanhp.com/) - Website for a Heat Pump cleaning business in Coastal Maine. 
 - [Mission Monte Líbano](https://antiguamission.net/) - Display site for a Mission church based in Antigua, Guatemala. 
 - [Minot Country Store](http://minotcountrystore.com/) - Landing & Live Menu for a convenience store. 

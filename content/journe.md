@@ -70,7 +70,7 @@ with no insulation, nights go from cold to hot and back to cold within minutes, 
 we woke up with cold food from the fridge, water to brush teeth, and wifi to check our morning notifications, life is good.
 
 {spent: 267.68}
-{miles: 40}
+{miles: 80}
 
 10/10 WHAT'S NEXT?
 

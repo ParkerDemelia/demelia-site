@@ -5,24 +5,39 @@ import Link from "next/link"
 import {
   ArrowUpRight,
   Backpack,
+  BatteryCharging,
+  Camera,
   Caravan,
   Check,
+  CloudRain,
   Copy,
   Facebook,
   Flame,
+  Footprints,
   Github,
   Globe,
+  HardDrive,
+  Headphones,
+  Heater,
   Instagram,
   Laptop,
+  Link2,
   Linkedin,
   Mail,
   NotebookPen,
   Package,
+  Pill,
+  PlugZap,
+  Presentation,
+  Projector,
   Rss,
+  Satellite,
   Sparkles,
   Star,
+  Tablet,
   Ticket,
   Twitch,
+  Usb,
   Youtube,
 } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
@@ -38,7 +53,28 @@ const SECTION_ICONS: [RegExp, LucideIcon][] = [
   [/desk|everyday|home/i, NotebookPen],
   [/van|build|camp/i, Caravan],
 ]
-const iconFor = (section: string) => SECTION_ICONS.find(([re]) => re.test(section))?.[1] ?? Package
+// A closer match from the item's own name wins over the section icon.
+const ITEM_ICONS: [RegExp, LucideIcon][] = [
+  [/adapter|shore power|ac port|plug/i, PlugZap],
+  [/starlink|satellite/i, Satellite],
+  [/battery|charger|solar/i, BatteryCharging],
+  [/projector/i, Projector],
+  [/heater/i, Heater],
+  [/shoe|runner|lone peak|sandal|boot/i, Footprints],
+  [/jacket|rain|shell/i, CloudRain],
+  [/carabiner/i, Link2],
+  [/camera|osmo|gopro/i, Camera],
+  [/hub|usb/i, Usb],
+  [/ssd|drive|storage/i, HardDrive],
+  [/airpods|headphone|earbud/i, Headphones],
+  [/ipad|tablet/i, Tablet],
+  [/macbook|laptop/i, Laptop],
+  [/whiteboard/i, Presentation],
+  [/creatine|vitamin|supplement/i, Pill],
+  [/backpack|allpa|bag/i, Backpack],
+]
+const iconFor = (name: string, section: string) =>
+  ITEM_ICONS.find(([re]) => re.test(name))?.[1] ?? SECTION_ICONS.find(([re]) => re.test(section))?.[1] ?? Package
 
 // {HOT} / {FAVORITE} / {NEW} get their own colours + icon; any other word gets the default tag.
 const TAG_STYLES: { match: RegExp; className: string; Icon?: LucideIcon }[] = [
@@ -86,7 +122,7 @@ function Price({ price }: { price: string }) {
 }
 
 function Thumb({ item, section }: { item: GearItem; section: string }) {
-  const Icon = iconFor(section)
+  const Icon = iconFor(item.name, section)
   return (
     <span
       className={`flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl ring-1 ring-border ${
@@ -352,7 +388,7 @@ export function GearLinks({ sections }: { sections: GearSection[] }) {
     <>
       <nav
         aria-label="Gear categories"
-        className="sticky top-0 z-20 -mx-4 mb-8 flex gap-2 overflow-x-auto bg-background/85 px-4 py-3 backdrop-blur [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="sticky top-0 z-20 -mx-4 mb-8 flex gap-2 overflow-x-auto bg-background/85 pl-4 pr-10 py-3 backdrop-blur [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [mask-image:linear-gradient(to_right,#000_calc(100%-2.5rem),transparent)]"
       >
         <Chip active={!filter} onClick={() => setFilter(null)}>all</Chip>
         {hasPicks && (

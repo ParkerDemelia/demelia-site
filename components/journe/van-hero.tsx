@@ -5,7 +5,7 @@ import { useInView } from "./use-in-view"
 import { VanSide } from "./van-art"
 
 // Two short square-wave beeps. Only ever runs from a click, so autoplay rules are fine.
-function honk() {
+export function honk() {
   try {
     const Ctx = window.AudioContext || (window as any).webkitAudioContext
     const ctx = new Ctx()
