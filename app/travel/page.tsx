@@ -1,57 +1,37 @@
-import { readFileSync } from "fs"
-import { join } from "path"
-import Link from "next/link"
-import { ArrowLeft } from "lucide-react"
-import ReactMarkdown from "react-markdown"
-import type { Components } from "react-markdown"
+import type { Metadata } from "next"
+import { Caveat } from "next/font/google"
+import { getTravel } from "@/lib/travel"
+import { getTravelMap } from "@/lib/travel-map"
+import { SiteHeader } from "@/components/site-header"
+import { TravelMap } from "@/components/travel/travel-map"
 
-const linkClass = "text-primary underline hover:brightness-125"
+const hand = Caveat({ subsets: ["latin"], variable: "--font-hand" })
 
-const markdownComponents: Components = {
-  h2: ({ children }) => (
-    <h2 className="relative text-lg font-semibold text-foreground mt-10 first:mt-0 mb-2 before:content-[''] before:absolute before:-left-[1.6rem] before:top-1.5 before:h-2.5 before:w-2.5 before:rounded-full before:bg-foreground before:ring-4 before:ring-background">
-      {children}
-    </h2>
-  ),
-  p: ({ children }) => <p className="text-[15px] leading-relaxed text-foreground/90 mb-4">{children}</p>,
-  ul: ({ children }) => <ul className="space-y-2 mb-6">{children}</ul>,
-  li: ({ children }) => <li className="text-sm text-foreground/90">{children}</li>,
-  strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
-  a: ({ href, children }) => {
-    if (!href) return <>{children}</>
-    const external = href.startsWith("http") || href.startsWith("mailto:")
-    return external ? (
-      <a href={href} target="_blank" rel="noopener noreferrer" className={linkClass}>
-        {children}
-      </a>
-    ) : (
-      <Link href={href} className={linkClass}>
-        {children}
-      </Link>
-    )
-  },
+export const metadata: Metadata = {
+  title: "travel — Parker Demelia",
+  description: "Everywhere I've been, on a map.",
 }
 
+const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
+
+// A full-screen map. Edit content/travel.md (## log) — towns need a spot in lib/travel-places.ts.
 export default function TravelPage() {
-  const travelMarkdown = readFileSync(join(process.cwd(), "content", "travel.md"), "utf-8")
+  const map = getTravelMap(getTravel())
+  const { countries, states, nights, cities } = map.totals
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8 max-w-3xl">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
-        >
-          <ArrowLeft className="h-3.5 w-3.5" />
-          back
-        </Link>
+    <div className={`${hand.variable} fixed inset-0 overflow-hidden bg-background`}>
+      <TravelMap {...map} />
 
-        <h1 className="text-3xl font-bold text-foreground tracking-tight mb-2">travel</h1>
-        <p className="text-sm text-muted-foreground mb-10">where I&apos;ve been and where I&apos;m headed</p>
-
-        <div className="relative border-l border-border pl-7 ml-1">
-          <ReactMarkdown components={markdownComponents}>{travelMarkdown}</ReactMarkdown>
-        </div>
+      {/* the site header and title float over the map; only their links catch clicks */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-30 h-56 bg-gradient-to-b from-background via-background/70 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-30 mx-auto max-w-2xl px-4 pt-12 sm:pt-16 [&_a]:pointer-events-auto">
+        <SiteHeader active="explore" />
+        <h1 className="-mt-8 text-4xl font-bold tracking-tight text-foreground sm:text-5xl">travel</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          {plural(countries, "country", "countries")} · {plural(states, "state", "states")} · {plural(nights, "night", "nights")} away ·{" "}
+          {plural(cities, "town", "towns")}
+        </p>
       </div>
     </div>
   )
