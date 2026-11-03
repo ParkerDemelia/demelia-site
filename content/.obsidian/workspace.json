@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "work.md",
+                "file": "journe.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "work"
+              "title": "journe"
             }
           }
         ]
@@ -187,6 +187,7 @@
   },
   "active": "4323dfdce54965a4",
   "lastOpenFiles": [
+    "work.md",
     "attachments/antigua.jpeg",
     "attachments/gear.jpeg",
     "journe.md",
@@ -197,7 +198,6 @@
     "gear.md",
     "attachments/travel.jpeg",
     "attachments/me.jpeg",
-    "work.md",
     "archive/bio.md",
     "archive/resume.md",
     "story.md",
@@ -211,7 +211,6 @@
     "attachments/work.jpeg",
     "attachments/jugs.jpeg",
     "attachments/panel.jpeg",
-    "attachments/wires.jpeg",
     "attachments",
     "work/Keep It Clean Heat Pumps.md",
     "work/Guatemala.md",
