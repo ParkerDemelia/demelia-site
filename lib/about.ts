@@ -5,13 +5,15 @@ import { listVaultMedia, mediaType } from "@/lib/vault"
 
 // The home page reads content/about.md:
 //   text before the first "## " heading  → the bio
+//   ## Links                            → "- [label](/path)" featured links under the bio
 //   ## What's New                        → "- Label: text" rows (see parseNews)
 //   ## Story                             → one "- " line per slide in the avatar story (see parseStory)
 const ABOUT_PATH = join(process.cwd(), "content", "about.md")
 
 export type NewsItem = { label: string; title: string; href?: string; detail?: string }
 export type StorySlide = { kind: "image" | "video" | "text"; src?: string; text?: string; caption?: string; link?: string }
-export type About = { bio: string; news: NewsItem[]; story: StorySlide[] }
+export type FeaturedLink = { label: string; href: string }
+export type About = { bio: string; links: FeaturedLink[]; news: NewsItem[]; story: StorySlide[] }
 
 const LINK = /\[([^\]]+)\]\(([^)\s]+)\)/
 
@@ -105,6 +107,10 @@ export async function getAbout(): Promise<About> {
   const { intro, sections } = splitSections(content)
   return {
     bio: intro,
+    links: listItems(sections["links"]).flatMap((l) => {
+      const m = l.match(LINK)
+      return m ? [{ label: m[1], href: m[2] }] : []
+    }),
     news: await parseNews(sections["what's new"]),
     story: parseStory(sections["story"]),
   }
