@@ -22,7 +22,7 @@ export const revalidate = 3600
 // Home is the professional side: who I am + client sites. Writing lives on /blog, everything else on /explore.
 // Bio: content/about.md (text before the first ##) · Work: the "Client Work" section of content/work.md
 export default async function HomePage() {
-  const { bio } = await getAbout()
+  const { bio, links } = await getAbout()
   const sections = getWorkList()
   const client = sections.find((s) => /client/i.test(s.title)) ?? sections[0]
   const [latest] = await getPosts()
@@ -51,13 +51,22 @@ export default async function HomePage() {
           </ReactMarkdown>
         </section>
 
-        {latest && (
-          <Ref href={latest.href} className="group mb-20 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-            <span className="font-mono text-[11px] uppercase tracking-[0.2em]">Latest</span>
-            <span className="text-foreground group-hover:text-primary transition-colors">{latest.title}</span>
-            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-          </Ref>
-        )}
+        {/* Featured links: the latest post, then the "## Links" list in content/about.md */}
+        <div className="mb-20 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
+          {latest && (
+            <Ref href={latest.href} className="group inline-flex items-center gap-2 hover:text-foreground transition-colors">
+              <span className="font-mono text-[11px] uppercase tracking-[0.2em]">Latest</span>
+              <span className="text-foreground group-hover:text-primary transition-colors">{latest.title}</span>
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+            </Ref>
+          )}
+          {links.map((l) => (
+            <Ref key={l.href} href={l.href} className="group inline-flex items-center gap-1.5 text-foreground hover:text-primary transition-colors">
+              {l.label}
+              <ArrowRight className="h-3.5 w-3.5 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
+            </Ref>
+          ))}
+        </div>
 
         {client && (
           <section>

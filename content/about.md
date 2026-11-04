@@ -1,4 +1,9 @@
-I'm Parker, a cs grad who designs and builds websites, films and edits video, and makes social content for businesses and organizations. When I'm not building, I'm [traveling](/travel), cliff jumping, or running far too long without stretching first.
+Aspiring Software designer, content creator, and professional side-quester. usually using my spanish in obscure places or hiking volcanos
+
+## Links
+
+- [my gear](/gear)
+- [learn spanish](/juegaespanol)
 
 ## What's New
 
