@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "work/juegaespanol.md",
+                "file": "about.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "juegaespanol"
+              "title": "about"
             }
           }
         ]
@@ -185,23 +185,28 @@
       "bases:Create new base": false
     }
   },
-  "active": "4323dfdce54965a4",
+  "active": "7bab181854ebef40",
   "lastOpenFiles": [
-    "attachments/juegaespanol-icon.svg",
-    "attachments/juegaespanol-teach.webp",
-    "attachments/juegaespanol-learn.webp",
-    "journe.md",
-    "work/juegaespanol.md",
-    "work.md",
-    "attachments/antigua.jpeg",
-    "attachments/gear.jpeg",
-    "antigua.md",
+    "attachments/gear/gear-whiteboard.jpg",
+    "attachments/gear/gear-vevor-8kw-diesel-heater.jpg",
+    "attachments/gear/gear-usb-c-hub.jpg",
+    "attachments/gear/gear-teva-hurricane-sandals.jpg",
+    "attachments/gear/gear-starlink-mini-12v-step-up-adapter.jpg",
+    "attachments/gear/gear-shore-power-ac-port.jpg",
+    "attachments/gear/gear-renogy-30a-dc-dc-dual-input-battery-charger.jpg",
+    "attachments/gear/gear-magcubic-projector.jpg",
+    "attachments/gear/gear-macbook-air-m4.jpg",
+    "attachments/gear/gear-m3-ipad-air.jpg",
+    "attachments/gear/gear-journal.jpg",
+    "attachments/gear",
     "build.md",
-    "about.md",
-    "travel.md",
     "gear.md",
-    "attachments/travel.jpeg",
-    "attachments/me.jpeg",
+    "journe.md",
+    "travel.md",
+    "work.md",
+    "antigua.md",
+    "about.md",
+    "work/juegaespanol.md",
     "archive/bio.md",
     "archive/resume.md",
     "story.md",
@@ -209,10 +214,6 @@
     "archive/esp.md",
     "archive/extras.md",
     "archive",
-    "attachments/work.jpeg",
-    "attachments/food.jpeg",
-    "attachments/llama.jpeg",
-    "attachments/work.jpeg",
     "attachments",
     "work/Keep It Clean Heat Pumps.md",
     "work/Guatemala.md",
