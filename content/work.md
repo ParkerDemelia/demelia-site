@@ -1,11 +1,13 @@
 ## Client Work
 
+- [Gemelli Films](http://gemellifilm.com/) - Full production catalog & CMS for a Film Studio.
+- [Minot Country Store](http://minotcountrystore.com/) - Landing & Live Menu for a convenience store. 
 - [Hotel Terra Maya](https://www.hotelterramaya.com/) - Lodging display for a Guatemalan Hotel.
-- [JuegaEspanol!](https://www.juegaespanol.com/) - Spanish Learning & Classroom management platform
+- [JuegaEspanol!](https://www.juegaespanol.com/) - Spanish Learning & Classroom management platform.
 - [3 Hermanos](http://3hermanosantigua.com/) - Booking site for a tour agency in Antigua, Guatemala.
 - [Keep It Clean HP](https://keepitcleanhp.com/) - Website for a Heat Pump cleaning business in Coastal Maine. 
 - [Mission Monte Líbano](https://antiguamission.net/) - Display site for a Mission church based in Antigua, Guatemala. 
-- [Minot Country Store](http://minotcountrystore.com/) - Landing & Live Menu for a convenience store. 
+
 
 
 ## Projects

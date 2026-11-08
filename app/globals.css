@@ -595,12 +595,6 @@
   .bento-tile { transition: border-color 0.2s ease, background-color 0.2s ease; }
 }
 
-/* avatar story viewer */
-@keyframes story-progress { from { width: 0; } to { width: 100%; } }
-.story-progress { animation: story-progress var(--d, 5s) linear forwards; }
-.story-fade-in { animation: journe-fade-in 0.2s ease-out; }
-.story-pop-in { animation: journe-pop-in 0.25s ease-out; }
-
 /* full Substack posts on /blog/[slug] — the HTML comes from the feed, so it's styled here */
 .post-body { font-size: 17px; line-height: 1.75; color: color-mix(in oklch, var(--foreground) 85%, transparent); }
 .post-body > * + * { margin-top: 1.25em; }

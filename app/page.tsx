@@ -22,10 +22,11 @@ export const revalidate = 3600
 // Home is the professional side: who I am + client sites. Writing lives on /blog, everything else on /explore.
 // Bio: content/about.md (text before the first ##) · Work: the "Client Work" section of content/work.md
 export default async function HomePage() {
-  const { bio, links } = await getAbout()
+  const { bio, links } = getAbout()
   const sections = getWorkList()
   const client = sections.find((s) => /client/i.test(s.title)) ?? sections[0]
-  const [latest] = await getPosts()
+  // only hit the feed when "- {newestblog}" is in the Links list
+  const [latest] = links.some((l) => l.kind === "newestblog") ? await getPosts() : []
 
   return (
     <div className="min-h-screen bg-background">
@@ -51,21 +52,24 @@ export default async function HomePage() {
           </ReactMarkdown>
         </section>
 
-        {/* Featured links: the latest post, then the "## Links" list in content/about.md */}
+        {/* Featured links: the "## Links" list in content/about.md, in order ({newestblog} = latest post) */}
         <div className="mb-20 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
-          {latest && (
-            <Ref href={latest.href} className="group inline-flex items-center gap-2 hover:text-foreground transition-colors">
-              <span className="font-mono text-[11px] uppercase tracking-[0.2em]">Latest</span>
-              <span className="text-foreground group-hover:text-primary transition-colors">{latest.title}</span>
-              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-            </Ref>
+          {links.map((l) =>
+            l.kind === "newestblog" ? (
+              latest && (
+                <Ref key="newestblog" href={latest.href} className="group inline-flex items-center gap-2 hover:text-foreground transition-colors">
+                  <span className="font-mono text-[11px] uppercase tracking-[0.2em]">Latest</span>
+                  <span className="text-foreground group-hover:text-primary transition-colors">{latest.title}</span>
+                  <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                </Ref>
+              )
+            ) : (
+              <Ref key={l.href} href={l.href} className="group inline-flex items-center gap-1.5 text-foreground hover:text-primary transition-colors">
+                {l.label}
+                <ArrowRight className="h-3.5 w-3.5 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
+              </Ref>
+            ),
           )}
-          {links.map((l) => (
-            <Ref key={l.href} href={l.href} className="group inline-flex items-center gap-1.5 text-foreground hover:text-primary transition-colors">
-              {l.label}
-              <ArrowRight className="h-3.5 w-3.5 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
-            </Ref>
-          ))}
         </div>
 
         {client && (

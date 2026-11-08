@@ -9,6 +9,24 @@
       "autoPort": true
     },
     {
+      "name": "Keep It Clean (client)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "../keepitclean", "run", "dev", "--", "-p", "3101"],
+      "port": 3101
+    },
+    {
+      "name": "Minot Country Store (client)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "../MCS/web", "run", "dev", "--", "-p", "3102"],
+      "port": 3102
+    },
+    {
+      "name": "Gemelli Films (client)",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--dir", "../gemellifilm", "dev", "-p", "3103"],
+      "port": 3103
+    },
+    {
       "name": "Next.js Production Server",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "start"],

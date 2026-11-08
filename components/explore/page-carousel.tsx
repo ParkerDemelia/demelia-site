@@ -12,11 +12,11 @@ export type Slide = {
   tags?: boolean // scatter the gear stickers over the slide
 }
 
-// Where each sticker sits on the gear slide: [class, label, top, left, tilt]
-const TAGS: [string, string, string, string, number][] = [
-  ["gear-tag-fav", "favorite", "8%", "-6%", -8],
-  ["", "essential", "45%", "36%", 6],
-  ["gear-tag-new", "new", "78%", "6%", -3],
+// The gear slide's stickers, top to bottom, hung off the card's left edge: [class, label, tilt]
+const TAGS: [string, string, number][] = [
+  ["gear-tag-fav", "favorite", -4],
+  ["", "essential", 3],
+  ["gear-tag-new", "new", -2],
 ]
 
 // Card size + spacing. Three cards sit fully in view; the two beyond tuck in behind them, faded.
@@ -76,18 +76,20 @@ export function PageCarousel({ slides, start = 0 }: { slides: Slide[]; start?: n
                       </span>
                     )}
                   </span>
-                  {s.tags &&
-                    TAGS.map(([cls, label, top, left, tilt]) => (
-                      // .gear-tag sets its own position, so a wrapper does the placing
-                      <span key={label} className="absolute" style={{ top, left }}>
+                  {s.tags && (
+                    // one column, shared left edge, even spacing — the pointed ends all line up
+                    <span className="pointer-events-none absolute -left-1.5 top-[12%] flex flex-col items-start gap-2 sm:-left-2.5 sm:gap-3">
+                      {TAGS.map(([cls, label, tilt]) => (
                         <span
+                          key={label}
                           className={`gear-tag ${cls} inline-block font-mono text-[7px] font-bold uppercase leading-none tracking-wider sm:text-[10px]`}
                           style={{ "--tilt": `${tilt}deg` } as React.CSSProperties}
                         >
                           {label}
                         </span>
-                      </span>
-                    ))}
+                      ))}
+                    </span>
+                  )}
                 </span>
                 <span className="mt-2 flex items-center gap-1 text-sm text-muted-foreground transition-colors group-hover:text-foreground">
                   {s.title}
