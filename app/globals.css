@@ -243,6 +243,30 @@
 @keyframes journe-pop-in { from { transform: scale(0.94); opacity: 0; } to { transform: none; opacity: 1; } }
 .journe-pop-in { animation: journe-pop-in 0.25s ease-out; }
 
+/* /build power map: current running down (phones) or across (sm+) the dashed wires */
+.build-flow {
+  background-image: linear-gradient(to bottom, var(--primary) 50%, transparent 50%);
+  background-size: 100% 8px;
+  animation: build-flow-down 0.8s linear infinite;
+  opacity: 0.7;
+}
+@keyframes build-flow-down { to { background-position: 0 8px; } }
+@keyframes build-flow-across { to { background-position: 8px 0; } }
+@media (min-width: 640px) {
+  .build-flow {
+    background-image: linear-gradient(to right, var(--primary) 50%, transparent 50%);
+    background-size: 8px 100%;
+    animation-name: build-flow-across;
+  }
+}
+/* always top-to-bottom, even on wide screens (charger → battery) */
+.build-flow.build-flow-v {
+  background-image: linear-gradient(to bottom, var(--primary) 50%, transparent 50%);
+  background-size: 100% 8px;
+  animation-name: build-flow-down;
+}
+@media (prefers-reduced-motion: reduce) { .build-flow { animation: none; } }
+
 @media (prefers-reduced-motion: reduce) {
   .journe-bob, .journe-hop, .journe-wheel, .journe-road-dash, .journe-puff, .journe-letter, .journe-bubble { animation: none; }
   .journe-odo-roll, .journe-receipt, .journe-reveal { transition: none; }

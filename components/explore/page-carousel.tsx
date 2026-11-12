@@ -9,15 +9,8 @@ export type Slide = {
   href: string
   src?: string // a photo; without one the slide shows `art` on a plain panel
   art?: React.ReactNode
-  tags?: boolean // scatter the gear stickers over the slide
+  note?: string // the one question this page answers, shown under the title
 }
-
-// The gear slide's stickers, top to bottom, hung off the card's left edge: [class, label, tilt]
-const TAGS: [string, string, number][] = [
-  ["gear-tag-fav", "favorite", -4],
-  ["", "essential", 3],
-  ["gear-tag-new", "new", -2],
-]
 
 // Card size + spacing. Three cards sit fully in view; the two beyond tuck in behind them, faded.
 const CARD_W = "w-[30%] sm:w-[28%]"
@@ -47,15 +40,18 @@ export function PageCarousel({ slides, start = 0 }: { slides: Slide[]; start?: n
         {/* invisible stand-in card that gives the row its height */}
         <div aria-hidden className={`invisible mx-auto ${CARD_W}`}>
           <div className="aspect-[3/4]" />
-          <div className="h-8" />
+          <div className="h-12" />
         </div>
 
         {/* the track fades out at both edges; the arrows sit above it, unfaded */}
         <div className="absolute inset-0 overflow-x-clip [mask-image:linear-gradient(to_right,transparent,#000_12%,#000_88%,transparent)]">
-          {slides.map((s, i) => {
+          {slides.flatMap((s, i) => {
             // signed distance from the middle, wrapped so the loop has no ends
             let off = (i - index + n) % n
             if (off > n / 2) off -= n
+            // with an even count, the card straight across the loop shows faded on both edges
+            return n % 2 === 0 && off === n / 2 ? [{ s, off }, { s, off: -off }] : [{ s, off }]
+          }).map(({ s, off }) => {
             const near = Math.abs(off) <= 1
             const shift = Math.abs(off) <= 1 ? off : Math.sign(off) * FAR
             const card = (
@@ -76,30 +72,17 @@ export function PageCarousel({ slides, start = 0 }: { slides: Slide[]; start?: n
                       </span>
                     )}
                   </span>
-                  {s.tags && (
-                    // one column, shared left edge, even spacing — the pointed ends all line up
-                    <span className="pointer-events-none absolute -left-1.5 top-[12%] flex flex-col items-start gap-2 sm:-left-2.5 sm:gap-3">
-                      {TAGS.map(([cls, label, tilt]) => (
-                        <span
-                          key={label}
-                          className={`gear-tag ${cls} inline-block font-mono text-[7px] font-bold uppercase leading-none tracking-wider sm:text-[10px]`}
-                          style={{ "--tilt": `${tilt}deg` } as React.CSSProperties}
-                        >
-                          {label}
-                        </span>
-                      ))}
-                    </span>
-                  )}
                 </span>
                 <span className="mt-2 flex items-center gap-1 text-sm text-muted-foreground transition-colors group-hover:text-foreground">
                   {s.title}
                   {s.href.startsWith("http") && <ArrowUpRight className="h-3.5 w-3.5" />}
                 </span>
+                {s.note && <span className="block text-xs text-muted-foreground/70">{s.note}</span>}
               </>
             )
             return (
               <div
-                key={s.href}
+                key={`${s.href}${off}`}
                 aria-hidden={!near}
                 className={`absolute left-1/2 top-0 ${CARD_W} transition-[transform,opacity,filter] duration-500 ease-out motion-reduce:transition-none`}
                 style={{

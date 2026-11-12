@@ -13,15 +13,28 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "about.md",
+                "file": "build.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "about"
+              "title": "build"
+            }
+          },
+          {
+            "id": "f526026597126401",
+            "type": "leaf",
+            "state": {
+              "type": "release-notes",
+              "state": {
+                "currentVersion": "1.15.1"
+              },
+              "icon": "lucide-book-up",
+              "title": "Release Notes 1.15.1"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -185,8 +198,17 @@
       "bases:Create new base": false
     }
   },
-  "active": "7bab181854ebef40",
+  "active": "f526026597126401",
   "lastOpenFiles": [
+    "travel.md",
+    "work.md",
+    "travel-draft.md",
+    "attachments/gear/gear-starlink-mini.jpg",
+    "journe.md",
+    "build.md",
+    "gear.md",
+    "antigua.md",
+    "about.md",
     "attachments/gear/gear-whiteboard.jpg",
     "attachments/gear/gear-vevor-8kw-diesel-heater.jpg",
     "attachments/gear/gear-usb-c-hub.jpg",
@@ -196,16 +218,7 @@
     "attachments/gear/gear-renogy-30a-dc-dc-dual-input-battery-charger.jpg",
     "attachments/gear/gear-magcubic-projector.jpg",
     "attachments/gear/gear-macbook-air-m4.jpg",
-    "attachments/gear/gear-m3-ipad-air.jpg",
-    "attachments/gear/gear-journal.jpg",
     "attachments/gear",
-    "build.md",
-    "gear.md",
-    "journe.md",
-    "travel.md",
-    "work.md",
-    "antigua.md",
-    "about.md",
     "work/juegaespanol.md",
     "archive/bio.md",
     "archive/resume.md",

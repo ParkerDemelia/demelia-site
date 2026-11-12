@@ -27,7 +27,7 @@ export default function JournePage() {
         totals={{ miles: journe.totalMiles, odometerStart: journe.odometerStart, bought: journe.bought }}
       >
         <main className="mx-auto max-w-2xl px-4 py-12 sm:py-16">
-          <SiteHeader active="explore" />
+          <SiteHeader active="explore" back="/explore" />
 
           <JourneTitle van={journe.van} />
           <JournalRoad intro={journe.intro} entries={journe.entries} odometerStart={journe.odometerStart} />
