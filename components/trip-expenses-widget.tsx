@@ -78,7 +78,7 @@ export function formatDateFull(dateStr: string) {
 
 export function formatAmount(amount: number) {
   if (amount == null) return "—"
-  return `$${amount.toFixed(2)}`
+  return `$${amount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
 export function useExpenses() {

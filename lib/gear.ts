@@ -89,7 +89,12 @@ function parseItem(line: string): GearItem | null {
 }
 
 export function getGear(): GearSection[] {
-  const md = rewriteEmbeds(readFileSync(GEAR_PATH, "utf-8").replace(/%%[\s\S]*?%%/g, ""))
+  return parseGear(readFileSync(GEAR_PATH, "utf-8"))
+}
+
+// Gear-style markdown → sections. Also used by /build for its "Shop the build" list.
+export function parseGear(raw: string): GearSection[] {
+  const md = rewriteEmbeds(raw.replace(/%%[\s\S]*?%%/g, ""))
   const sections: GearSection[] = []
   for (const line of md.split("\n")) {
     const heading = line.match(/^#{1,3}\s+(.+)$/)

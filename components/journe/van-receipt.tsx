@@ -48,7 +48,7 @@ export function VanReceipt({ miles }: { miles: number }) {
   const last = vanExpenses[vanExpenses.length - 1]?.date
 
   return (
-    <section className="mb-20">
+    <section id="receipt" className="mb-20 scroll-mt-8">
       <SectionLabel>the receipt</SectionLabel>
       <div ref={ref} className="mx-auto max-w-sm">
         {/* printer slot */}

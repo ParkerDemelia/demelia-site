@@ -1,6 +1,6 @@
 ## Client Work
 
-- [Gemelli Films](http://gemellifilm.com/) - Full production catalog & CMS for a Film Studio.
+- [Gemelli Films](http://gemellifilm.vercel.app/) - Full production catalog & CMS for a Film Studio.
 - [Minot Country Store](http://minotcountrystore.com/) - Landing & Live Menu for a convenience store. 
 - [Hotel Terra Maya](https://www.hotelterramaya.com/) - Lodging display for a Guatemalan Hotel.
 - [JuegaEspanol!](https://www.juegaespanol.com/) - Spanish Learning & Classroom management platform.

@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { select } from "d3-selection"
 import "d3-transition"
 import { zoom, zoomIdentity, type ZoomBehavior, type ZoomTransform } from "d3-zoom"
-import { Home, Minus, Plus, RotateCcw, X } from "lucide-react"
+import { Home, Maximize2, Minus, Plus, RotateCcw, X } from "lucide-react"
 import type { City, Region, Shape } from "@/lib/travel-map"
 
 const OCEAN = "oklch(0.17 0.015 245)"
@@ -66,7 +66,8 @@ function PlacePanel({ region, onClose }: { region: Region; onClose: () => void }
   )
 }
 
-// Everywhere I've been, full screen. Drag/scroll/pinch to move around; click a lit-up place for its numbers.
+// Everywhere I've been. In the page it's a framed card that leaves scrolling alone: tap a lit-up place for
+// its numbers, or expand it to full screen to drag, scroll and pinch around.
 export function TravelMap({
   width,
   height,
@@ -96,6 +97,9 @@ export function TravelMap({
   const [selected, setSelected] = useState<string | null>(null)
   const [hover, setHover] = useState<{ name: string; x: number; y: number } | null>(null)
   const [moved, setMoved] = useState(false)
+  const [expanded, setExpanded] = useState(false)
+  const expandedRef = useRef(false)
+  expandedRef.current = expanded
 
   const byKey = useMemo(() => new Map(regions.map((r) => [r.key, r])), [regions])
   const region = selected ? byKey.get(selected) : undefined
@@ -105,6 +109,8 @@ export function TravelMap({
     const svg = svgRef.current
     if (!svg) return
     const behavior = zoom<SVGSVGElement, unknown>()
+      // framed in the page, wheel and touch belong to the page's scroll; only a mouse drag pans
+      .filter((e: Event) => expandedRef.current || (e.type !== "wheel" && !e.type.startsWith("touch")))
       .scaleExtent([1, MAX_ZOOM])
       .translateExtent([
         [-width * bleed, -height * bleed],
@@ -134,7 +140,13 @@ export function TravelMap({
   }, [selected])
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setSelected(null)
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return
+      setSelected((k) => {
+        if (k === null) setExpanded(false)
+        return null
+      })
+    }
     window.addEventListener("keydown", onKey)
     return () => window.removeEventListener("keydown", onKey)
   }, [])
@@ -159,6 +171,16 @@ export function TravelMap({
     if (zoomRef.current && svgRef.current && !moved) select(svgRef.current).call(zoomRef.current.transform, home)
   }, [home, moved])
 
+  // full screen: lock the page behind it
+  useEffect(() => {
+    if (!expanded) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    return () => {
+      document.body.style.overflow = prev
+    }
+  }, [expanded])
+
   const reset = () => {
     if (zoomRef.current && svgRef.current) select(svgRef.current).transition().duration(400).call(zoomRef.current.transform, home)
   }
@@ -175,12 +197,17 @@ export function TravelMap({
   const showLabels = t.k >= 3
 
   return (
-    <div ref={boxRef} className="absolute inset-0 overflow-hidden" style={{ background: OCEAN }} onMouseLeave={() => setHover(null)}>
+    <div
+      ref={boxRef}
+      className={expanded ? "fixed inset-0 z-50 overflow-hidden" : "absolute inset-0 overflow-hidden"}
+      style={{ background: OCEAN }}
+      onMouseLeave={() => setHover(null)}
+    >
       <svg
         ref={svgRef}
         viewBox={`0 0 ${width} ${height}`}
         preserveAspectRatio="xMidYMid meet"
-        className="block h-full w-full cursor-grab touch-none active:cursor-grabbing"
+        className={`block h-full w-full cursor-grab active:cursor-grabbing ${expanded ? "touch-none" : "touch-pan-y"}`}
         onClick={() => setSelected(null)}
       >
         <g transform={t.toString()}>
@@ -303,8 +330,20 @@ export function TravelMap({
         </div>
       )}
 
+      {/* expand to full screen / close it */}
+      <button
+        type="button"
+        onClick={() => (setExpanded((x) => !x), setSelected(null))}
+        aria-label={expanded ? "Close full screen map" : "Expand map"}
+        className="absolute right-3 top-3 z-20 flex h-10 w-10 items-center justify-center rounded-xl bg-background/85 text-foreground ring-1 ring-border backdrop-blur transition-colors hover:bg-muted sm:right-6 sm:top-6"
+      >
+        {expanded ? <X className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+      </button>
+
       {!moved && !region && (
-        <p className="journe-hand pointer-events-none absolute bottom-4 left-4 z-10 -rotate-2 text-xl text-primary sm:bottom-6 sm:left-6">drag around · tap a yellow place</p>
+        <p className="journe-hand pointer-events-none absolute bottom-3 left-3 z-10 -rotate-2 text-lg text-primary sm:bottom-5 sm:left-5 sm:text-xl">
+          {expanded ? "drag around · tap a yellow place" : "tap a yellow place"}
+        </p>
       )}
     </div>
   )

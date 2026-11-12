@@ -309,7 +309,7 @@ function CouponCard({ item }: { item: GearItem }) {
 }
 
 // A tagged item with a photo gets the big Linktree "featured" layout.
-function FeaturedCard({ item }: { item: GearItem }) {
+export function FeaturedCard({ item }: { item: GearItem }) {
   return (
     <a {...linkProps(item)} className={`${cardClass} mt-3`}>
       <Stickers item={item} className="-top-3 left-4" />
@@ -337,7 +337,7 @@ function FeaturedCard({ item }: { item: GearItem }) {
   )
 }
 
-function LinkCard({ item, section }: { item: GearItem; section: string }) {
+export function LinkCard({ item, section }: { item: GearItem; section: string }) {
   return (
     <a {...linkProps(item)} className={`${cardClass} ${item.tags.length ? "mt-3" : ""}`}>
       <Stickers item={item} className="-top-3 right-4" />

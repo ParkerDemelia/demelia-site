@@ -4,18 +4,12 @@ import { createContext, useContext, useEffect, useMemo, useRef, useState } from 
 import { ChevronLeft, ChevronRight, X } from "lucide-react"
 import { useExpenses, type Expense } from "@/components/trip-expenses-widget"
 import type { Media } from "@/lib/journe"
+import { isVanExpense } from "@/lib/van-expenses"
 
 export function isVideo(src: string) {
   return /\.(mp4|mov|webm|m4v)$/i.test(src)
 }
 
-// Notion multi-select comes through as "a, b" — match "van" anywhere in it.
-function isVanExpense(e: Expense) {
-  return e.category
-    .toLowerCase()
-    .split(",")
-    .some((c) => c.trim() === "van")
-}
 
 export type Totals = { miles: number; odometerStart: number; bought?: string }
 

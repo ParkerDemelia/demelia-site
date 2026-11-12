@@ -4,7 +4,6 @@ import { resolveMedia } from "@/lib/vault"
 import { Ref, SectionLabel } from "@/components/ref"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
-import { ChickenBus } from "@/components/antigua/chicken-bus-hero"
 import { PageCarousel, type Slide } from "@/components/explore/page-carousel"
 
 export const metadata = { title: "Explore — Parker Demelia" }
@@ -39,13 +38,13 @@ const photo = (name: string) =>
 export default function ExplorePage() {
   const sections = getWorkList().filter((s) => !/client/i.test(s.title) && s.items.length > 0)
 
-  // Left to right as it lands: antigua (faded), travel, me (middle), journe, gear (faded).
+  // The trip, one question per card. Left to right as it lands: travel, journe (middle), gear,
+  // with expenses faded on both edges.
   const slides: Slide[] = [
-    { title: "antigua", href: "/antigua", src: photo("antigua"), art: <ChickenBus /> },
-    { title: "travel", href: "/travel", src: photo("travel") },
-    { title: "me", href: "https://www.instagram.com/parker.demelia/", src: photo("me") },
-    { title: "journe", href: "/journe", src: photo("van") },
-    { title: "gear", href: "/gear", src: photo("gear"), tags: true },
+    { title: "travel", note: "where I've been", href: "/travel", src: photo("travel") },
+    { title: "journe", note: "how I get there", href: "/journe", src: photo("van") },
+    { title: "gear", note: "what I bring", href: "/gear", src: photo("gear") },
+    { title: "expenses", note: "what it costs", href: "/expenses", src: photo("food") },
   ]
 
   return (
@@ -54,7 +53,7 @@ export default function ExplorePage() {
         <SiteHeader active="explore" />
         <p className="mb-10 text-muted-foreground">The creative side: where I travel, the van I&apos;m building, and the videos and side projects I make for fun.</p>
 
-        <PageCarousel slides={slides} start={2} />
+        <PageCarousel slides={slides} start={1} />
 
         <div className="space-y-14">
           {sections.map((s) => (

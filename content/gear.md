@@ -1,22 +1,10 @@
-
-
-## Van Build
-
-- [Renogy 30A DC-DC Dual Input Battery Charger](https://amzn.to/4hIzb0g) - Charges the house battery from the alternator while driving, plus solar input. ![[gear-renogy-30a-dc-dc-dual-input-battery-charger.jpg]]
-- [Starlink Mini ](https://starlink.com?referral=RC-DF-15249289-99322-11) {ESSENTIAL} - Fast WIFI for work or leisure, anywhere.
-- [Starlink Mini 12V Step-Up Adapter](https://amzn.to/4dh0tth) - Runs the Starlink Mini straight off the 12V system, no inverter needed. ![[gear-starlink-mini-12v-step-up-adapter.jpg]]
-- [Shore Power AC Port](https://amzn.to/4y5mFxX) - Plug in at campgrounds or a driveway to charge up. ![[gear-shore-power-ac-port.jpg]]
-- [Magcubic Projector](https://amzn.to/4z2LNpO) - Movie nights in the van. ![[gear-magcubic-projector.jpg]]
-- [Vevor 8KW Diesel Heater](https://amzn.to/3Vkl0XL) - Keeps the van warm on cold nights. ![[gear-vevor-8kw-diesel-heater.jpg]]
-
-
 ## Carry & On Foot
 
 - [Cotopaxi Allpa 28L](https://amzn.to/49UnBvc) {FAVORITE} - Backpack that somehow counts as a personal item. Opens flat like a suitcase and fits a month of stuff. ![[gear-cotopaxi-allpa-28l.jpg]]
 - [Altra Lone Peak 9+](https://amzn.to/3ZrA2te) - Zero-drop trail runners I hike, walk, and travel in. ![[gear-altra-lone-peak-9.jpg]]
 - [Teva Hurricane Sandals](https://amzn.to/3QkUcEA) - Really durable sandal for just about everything, from mountain hikes to airport travel. ![[gear-teva-hurricane-sandals.jpg]]
 - [Eddie Bauer Cloud Cap Rain Jacket](https://amzn.to/4g58jbJ) - Packable shell that lives in my bag for surprise weather. ![[gear-eddie-bauer-cloud-cap-rain-jacket.jpg]]
-- [Black Diamond Carabiner](https://amzn.to/44emaVC) {NEED} - Carabiners are my #1 travel rec. Clips gear to the outside of my pack so nothing gets lost. ![[gear-black-diamond-carabiner.jpg]]
+- [Black Diamond Carabiner](https://amzn.to/44emaVC) {ESSENTIAL} - Carabiners are my #1 travel rec. Clips gear to the outside of my pack so nothing gets lost. ![[gear-black-diamond-carabiner.jpg]]
 
 ## Find me {socials}
 

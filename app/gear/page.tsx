@@ -9,7 +9,7 @@ const hand = Caveat({ subsets: ["latin"], variable: "--font-hand" })
 
 export const metadata: Metadata = {
   title: "gear — Parker Demelia",
-  description: "The travel, tech, and van gear I actually use and recommend.",
+  description: "The travel and tech gear I actually use and recommend.",
 }
 
 // Edit content/gear.md — see lib/gear.ts for the {HOT} / {$price} / ![[photo]] syntax.
@@ -20,7 +20,7 @@ export default function GearPage() {
   return (
     <div className={`${hand.variable} min-h-screen bg-background`}>
       <main className="mx-auto max-w-2xl px-4 py-12 sm:py-16">
-        <SiteHeader active="explore" />
+        <SiteHeader active="explore" back="/explore" />
 
         <header>
           <h1 className="text-5xl font-bold tracking-tight text-foreground sm:text-6xl">gear</h1>
