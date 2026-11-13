@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react"
 import { Ref } from "@/components/ref"
 
@@ -25,9 +25,39 @@ export function PageCarousel({ slides, start = 0 }: { slides: Slide[]; start?: n
   const n = slides.length
   const go = (d: number) => setIndex((i) => (i + d + n) % n)
 
+  // Trackpad: a sideways two-finger swipe turns the loop one card. The swipe's momentum keeps
+  // sending wheel events, so it only counts again once they've stopped for a moment.
+  const row = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const el = row.current
+    if (!el) return
+    let sum = 0
+    let locked = false
+    let idle: ReturnType<typeof setTimeout> | undefined
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return // vertical: let the page scroll
+      e.preventDefault() // and don't trigger the browser's swipe-back
+      clearTimeout(idle)
+      idle = setTimeout(() => ((sum = 0), (locked = false)), 180)
+      if (locked) return
+      sum += e.deltaX
+      if (Math.abs(sum) > 40) {
+        go(sum > 0 ? 1 : -1)
+        locked = true
+      }
+    }
+    el.addEventListener("wheel", onWheel, { passive: false })
+    return () => {
+      el.removeEventListener("wheel", onWheel)
+      clearTimeout(idle)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [n])
+
   return (
     <section aria-roledescription="carousel" aria-label="Pages" className="mb-16">
       <div
+        ref={row}
         className="relative"
         onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
         onTouchEnd={(e) => {

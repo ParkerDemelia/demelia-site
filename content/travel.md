@@ -78,7 +78,7 @@ states: Maine
 11/21-11/24 New Jersey
 	Asbury Park, Galloway, Port Monmouth
 7/26-7/29 Middletown NJ
-7/21-7/22 Franconia
+7/21-7/22 [Franconia](https://www.youtube.com/watch?v=NmGgea4itv8)
 4/20-4/27 Las Vegas & Grand Canyon
 4/7-4/15 Antigua, Guatemala
 	10-11 - Guatemala City
