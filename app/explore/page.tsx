@@ -5,6 +5,8 @@ import { Ref, SectionLabel } from "@/components/ref"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { PageCarousel, type Slide } from "@/components/explore/page-carousel"
+import { HitsCarousel } from "@/components/explore/hits-carousel"
+import { getHits } from "@/lib/hits"
 
 export const metadata = { title: "Explore — Parker Demelia" }
 
@@ -37,6 +39,8 @@ const photo = (name: string) =>
 // Side projects + videos: the non-"Client Work" sections of content/work.md
 export default function ExplorePage() {
   const sections = getWorkList().filter((s) => !/client/i.test(s.title) && s.items.length > 0)
+  // Best-of videos: content/hits.md
+  const hits = getHits()
 
   // The trip, one question per card. Left to right as it lands: travel, journe (middle), gear,
   // with expenses faded on both edges.
@@ -56,6 +60,12 @@ export default function ExplorePage() {
         <PageCarousel slides={slides} start={1} />
 
         <div className="space-y-14">
+          {hits.hits.length > 0 && (
+            <section>
+              <SectionLabel>{hits.title}</SectionLabel>
+              <HitsCarousel hits={hits.hits} />
+            </section>
+          )}
           {sections.map((s) => (
             <section key={s.title}>
               <SectionLabel>{s.title}</SectionLabel>
