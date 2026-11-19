@@ -28,7 +28,7 @@ export default function WorkPage() {
           <ul className="space-y-8">
             {studies.map((s) => (
               <li key={s.slug}>
-                <Link href={`/work/${s.slug}`} className="group block">
+                <Link href={`/work/${encodeURIComponent(s.slug)}`} className="group block">
                   <div className="flex items-baseline justify-between gap-4">
                     <h2 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                       {s.title}

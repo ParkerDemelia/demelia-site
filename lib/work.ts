@@ -1,6 +1,7 @@
 import { readdirSync, readFileSync, existsSync } from "fs"
 import { join } from "path"
 import matter from "gray-matter"
+import { rewriteEmbeds } from "./vault"
 
 // Case studies live in content/work/<slug>.md — the filename is the URL slug.
 // Files starting with "_" (e.g. _template.md) are ignored.
@@ -41,7 +42,7 @@ function parse(slug: string): CaseStudy {
     repo: data.repo,
     cover: data.cover,
     draft: data.draft === true,
-    content,
+    content: rewriteEmbeds(content),
   }
 }
 
@@ -60,7 +61,11 @@ export function getCaseStudies(): CaseStudyMeta[] {
     .map(({ content: _content, ...meta }) => meta)
 }
 
+// Slugs come from filenames and may contain spaces, which arrive URL-encoded in route params.
 export function getCaseStudy(slug: string): CaseStudy | null {
+  try {
+    slug = decodeURIComponent(slug)
+  } catch {}
   if (!getCaseStudySlugs().includes(slug)) return null
   const study = parse(slug)
   return study.draft ? null : study
