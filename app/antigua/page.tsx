@@ -89,7 +89,7 @@ export default function AntiguaPage() {
   return (
     <div className={`${hand.variable} min-h-screen overflow-x-hidden bg-background`}>
       <main className="mx-auto max-w-2xl px-4 py-12 sm:py-16">
-        <SiteHeader active="explore" />
+        <SiteHeader />
 
         <header className="mb-10">
           <h1 className="text-5xl font-bold tracking-tight text-foreground sm:text-6xl">

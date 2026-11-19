@@ -1,6 +1,6 @@
 ## Parker's hits
 
-%% One video per line, in the order they show on /explore:
+%% One video per line, in the order they show on home:
    - [Title](youtube link) {year} - a line or two about it
    {year} is optional. A &t=219s on the link starts the video there. %%
 

@@ -9,6 +9,10 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // /explore was folded into the home page
+  async redirects() {
+    return [{ source: "/explore", destination: "/", permanent: true }]
+  },
   experimental: {
     // vault media is read from content/ at runtime by app/vault/[...path]/route.ts
     outputFileTracingIncludes: {

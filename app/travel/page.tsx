@@ -25,7 +25,7 @@ export default function TravelPage() {
   return (
     <div className={`${hand.variable} min-h-screen bg-background`}>
       <main className="mx-auto max-w-2xl px-4 py-12 sm:py-16">
-        <SiteHeader active="explore" back="/explore" />
+        <SiteHeader back="/" />
         <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">travel</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           {plural(countries, "country", "countries")} · {plural(states, "state", "states")} · {plural(nights, "night", "nights")} away ·{" "}

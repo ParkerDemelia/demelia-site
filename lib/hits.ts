@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "fs"
 import { join } from "path"
 
-// content/hits.md — a "## Heading" (the section title on /explore), then one video per line:
+// content/hits.md — a "## Heading" (the section title on home), then one video per line:
 //
 //   - [Gone Campin' to Errol](https://www.youtube.com/watch?v=hrxTjCJAuM0&t=30s) {2024} - Camping up in Errol.
 //

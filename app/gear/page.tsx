@@ -20,7 +20,7 @@ export default function GearPage() {
   return (
     <div className={`${hand.variable} min-h-screen bg-background`}>
       <main className="mx-auto max-w-2xl px-4 py-12 sm:py-16">
-        <SiteHeader active="explore" back="/explore" />
+        <SiteHeader back="/" />
 
         <header>
           <h1 className="text-5xl font-bold tracking-tight text-foreground sm:text-6xl">gear</h1>

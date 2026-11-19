@@ -380,11 +380,6 @@
 }
 .journe-price:hover { transform: rotate(3deg) scale(1.08); }
 
-/* ── /explore ──────────────────────────────────────── */
-/* page-card art sits still until hovered */
-.explore-page .journe-wheel { animation-play-state: paused; }
-.explore-page:hover .journe-wheel { animation-play-state: running; }
-
 /* ── /gear ───────────────────────────────────────────── */
 /* {HOT} / {FAVORITE} / {NEW} stickers — same hang-tag shape as .journe-price */
 .gear-tag {
