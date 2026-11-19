@@ -25,7 +25,7 @@ export type Trip = {
   photos: TravelPhoto[]
 }
 // One line of the log: a stay from start to end (ISO dates) at some places, with stops inside it.
-export type Stay = { start: string; end: string; names: string[]; stops: string[][] }
+export type Stay = { start: string; end: string; names: string[]; stops: string[][]; link?: string }
 export type Travel = { home?: string; extraPlaces: string[]; trips: Trip[]; log: Stay[] }
 
 const MONTH = String.raw`[A-Za-z]{3,9}\.?`
@@ -42,6 +42,11 @@ function placesIn(rest: string): string[] {
   return parts.length && parts.every(titleCase) ? parts : []
 }
 
+// "[Franconia](https://...)" → the text for names and the map, the URL kept as the stay's link
+const LINK = /\[([^\]]+)\]\(<?([^)>\s]+)>?\)/g
+const firstLink = (s: string) => [...s.matchAll(LINK)][0]?.[2]
+const unlink = (s: string) => s.replace(LINK, "$1")
+
 const splitNames = (s: string) => s.split(/\s*(?:,|&|\band\b)\s*/).map((n) => n.trim()).filter(Boolean)
 const iso = (y: number, m: number, d: number) => `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`
 
@@ -57,14 +62,14 @@ function parseLog(text: string): Stay[] {
     }
     if (/^\s/.test(raw)) {
       // "6-7 San Jose", "8 - La Fortuna", "9, 10 - Turrialba", "6/21-6/23 El Paredon", "Pinones"
-      const name = raw.trim().replace(/^[\d/]+(?:\s*[-,]\s*[\d/]+)*\s*-?\s*/, "")
+      const name = unlink(raw.trim()).replace(/^[\d/]+(?:\s*[-,]\s*[\d/]+)*\s*-?\s*/, "")
       if (name && stays.length) stays[stays.length - 1].stops.push(splitNames(name))
       continue
     }
     const m = raw.trim().match(/^(\d{1,2})\/(\d{1,2})(?:\s*[-–]\s*(\d{1,2})\/(\d{1,2}))?\s+(.+)$/)
     if (!m) continue
     const [sm, sd, em, ed] = [m[1], m[2], m[3] ?? m[1], m[4] ?? m[2]].map(Number)
-    stays.push({ start: iso(year, sm, sd), end: iso(em < sm ? year + 1 : year, em, ed), names: splitNames(m[5]), stops: [] })
+    stays.push({ start: iso(year, sm, sd), end: iso(em < sm ? year + 1 : year, em, ed), names: splitNames(unlink(m[5])), stops: [], link: firstLink(m[5]) })
   }
   return stays
 }

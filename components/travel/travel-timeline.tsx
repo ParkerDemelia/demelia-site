@@ -1,4 +1,5 @@
 import type { Stay, Travel, Trip } from "@/lib/travel"
+import { inlineLink } from "@/components/ref"
 
 // Below the map: every year, newest first. A journal section from travel.md ("## Feb - Apr 2026 - ...")
 // is a chapter with its words and postcard line, holding the log's stays that start inside its months.
@@ -41,7 +42,13 @@ function StayRow({ stay }: { stay: Stay }) {
     <li className="grid grid-cols-[6.5rem_1fr_auto] items-baseline gap-x-3 py-2 sm:grid-cols-[7.5rem_1fr_auto]">
       <span className="whitespace-nowrap font-mono text-[11px] tabular-nums text-muted-foreground">{range(stay)}</span>
       <span className="min-w-0">
-        <span className="text-sm text-foreground">{place(stay)}</span>
+        {stay.link ? (
+          <a href={stay.link} target="_blank" rel="noopener noreferrer" className={`text-sm ${inlineLink}`}>
+            {place(stay)}
+          </a>
+        ) : (
+          <span className="text-sm text-foreground">{place(stay)}</span>
+        )}
         {stops.length > 0 && <span className="block text-xs leading-snug text-muted-foreground">{stops.join(" · ")}</span>}
       </span>
       <span className="font-mono text-[11px] tabular-nums text-muted-foreground/70">{n > 0 ? `${n}n` : "day"}</span>
