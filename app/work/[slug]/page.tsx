@@ -1,103 +1,107 @@
-import Link from "next/link"
+import { existsSync } from "fs"
+import { join } from "path"
 import { notFound } from "next/navigation"
-import { ArrowLeft } from "lucide-react"
-import ReactMarkdown from "react-markdown"
-import type { Components } from "react-markdown"
 import type { Metadata } from "next"
+import ReactMarkdown from "react-markdown"
+import remarkBreaks from "remark-breaks"
+import remarkGfm from "remark-gfm"
 import { getCaseStudy, getCaseStudySlugs } from "@/lib/work"
+import { resolveMedia, rewriteEmbeds } from "@/lib/vault"
+import { Ref, host, inlineLink } from "@/components/ref"
+import { SiteHeader } from "@/components/site-header"
+import { SiteFooter } from "@/components/site-footer"
 
-const linkClass = "text-primary underline hover:brightness-125"
-
-const markdownComponents: Components = {
-  h2: ({ children }) => (
-    <h2 className="text-lg font-semibold text-foreground mt-10 first:mt-0 mb-3">{children}</h2>
-  ),
-  h3: ({ children }) => <h3 className="text-base font-semibold text-foreground mt-6 mb-2">{children}</h3>,
-  p: ({ children }) => <p className="text-[15px] leading-relaxed text-foreground/90 mb-4">{children}</p>,
-  ul: ({ children }) => <ul className="list-disc pl-5 space-y-2 mb-6">{children}</ul>,
-  ol: ({ children }) => <ol className="list-decimal pl-5 space-y-2 mb-6">{children}</ol>,
-  li: ({ children }) => <li className="text-[15px] text-foreground/90">{children}</li>,
-  strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
-  blockquote: ({ children }) => (
-    <blockquote className="border-l-2 border-border pl-4 text-muted-foreground italic mb-4">{children}</blockquote>
-  ),
-  code: ({ children }) => (
-    <code className="font-mono text-[13px] bg-muted rounded px-1 py-0.5">{children}</code>
-  ),
-  pre: ({ children }) => (
-    <pre className="bg-muted rounded-md p-4 overflow-x-auto mb-6 [&_code]:bg-transparent [&_code]:p-0">{children}</pre>
-  ),
-  img: ({ src, alt }) => (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img src={typeof src === "string" ? src : undefined} alt={alt ?? ""} className="rounded-md border border-border my-6 w-full" />
-  ),
-  hr: () => <hr className="border-border my-10" />,
-  a: ({ href, children }) => {
-    if (!href) return <>{children}</>
-    const external = href.startsWith("http") || href.startsWith("mailto:")
-    return external ? (
-      <a href={href} target="_blank" rel="noopener noreferrer" className={linkClass}>
-        {children}
-      </a>
-    ) : (
-      <Link href={href} className={linkClass}>
-        {children}
-      </Link>
-    )
-  },
-}
-
+// One page per content/work/<slug>.md, written in Obsidian:
+//   frontmatter  title · description (or summary) · link (shown under the title) · repo · logo (a file in content/attachments)
+//   body         markdown; images are ![[file.webp|caption]] from content/attachments
 export function generateStaticParams() {
   return getCaseStudySlugs().map((slug) => ({ slug }))
 }
 
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const study = getCaseStudy(params.slug)
+  const study = getCaseStudy(decodeURIComponent(params.slug))
   if (!study) return {}
   return { title: `${study.title} — Parker Demelia`, description: study.summary }
 }
 
+// A cover only shows if the file is really in public/ (the template's placeholder path isn't)
+const publicFile = (src?: string) => (src && existsSync(join(process.cwd(), "public", src)) ? src : undefined)
+
 export default function CaseStudyPage({ params }: { params: { slug: string } }) {
-  const study = getCaseStudy(params.slug)
+  const study = getCaseStudy(decodeURIComponent(params.slug))
   if (!study) notFound()
 
-  const links = [
-    study.link && { label: "live", href: study.link },
-    study.repo && { label: "code", href: study.repo },
-  ].filter(Boolean) as { label: string; href: string }[]
+  const body = rewriteEmbeds(study.content.trim())
+  const logo = study.logo ? resolveMedia(study.logo) : null
+  const cover = publicFile(study.cover)
 
   return (
     <div className="min-h-screen bg-background">
-      <article className="container mx-auto px-4 py-8 max-w-3xl">
-        <Link
-          href="/work"
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
-        >
-          <ArrowLeft className="h-3.5 w-3.5" />
-          work
-        </Link>
+      <main className="mx-auto max-w-2xl px-4 py-12 sm:py-16">
+        <SiteHeader back="/work" />
 
-        <h1 className="text-3xl font-bold text-foreground tracking-tight mb-2">{study.title}</h1>
-        {study.summary && <p className="text-sm text-muted-foreground mb-4">{study.summary}</p>}
-
-        <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground mb-10">
-          {study.date && <span>{study.date}</span>}
-          {study.role && <span>{study.role}</span>}
-          {study.stack && <span>{study.stack.join(" · ")}</span>}
-          {links.map((l) => (
-            <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer" className={linkClass}>
-              {l.label}
-            </a>
-          ))}
+        <h1 className="text-5xl font-bold tracking-tight text-foreground sm:text-6xl">{study.title}</h1>
+        <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 font-mono text-sm text-muted-foreground">
+          {host(study.link) && (
+            <Ref href={study.link} className="hover:text-primary transition-colors">
+              {host(study.link)} ↗
+            </Ref>
+          )}
+          {study.repo && (
+            <Ref href={study.repo} className="hover:text-primary transition-colors">
+              code ↗
+            </Ref>
+          )}
         </div>
 
-        {study.cover && (
+        {cover && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={study.cover} alt="" className="rounded-md border border-border mb-10 w-full" />
+          <img src={cover} alt="" className="mt-8 block w-full rounded-xl ring-1 ring-border" />
         )}
 
-        <ReactMarkdown components={markdownComponents}>{study.content}</ReactMarkdown>
-      </article>
+        {body && (
+          <article className="mt-8 text-[17px] leading-relaxed text-foreground/90">
+            {/* Render like Obsidian: single line breaks stay breaks (remark-breaks), bare URLs become links (remark-gfm) */}
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm, remarkBreaks]}
+              components={{
+                h2: ({ children }) => <h2 className="mb-3 mt-10 text-2xl font-semibold text-foreground">{children}</h2>,
+                h3: ({ children }) => <h3 className="mb-2 mt-8 text-lg font-semibold text-foreground">{children}</h3>,
+                p: ({ children }) => <p className="mb-4 last:mb-0">{children}</p>,
+                ul: ({ children }) => <ul className="mb-4 list-disc space-y-1 pl-5">{children}</ul>,
+                ol: ({ children }) => <ol className="mb-4 list-decimal space-y-1 pl-5">{children}</ol>,
+                blockquote: ({ children }) => <blockquote className="mb-4 border-l-2 border-border pl-4 italic text-muted-foreground">{children}</blockquote>,
+                code: ({ children }) => <code className="rounded bg-muted px-1 py-0.5 font-mono text-[14px]">{children}</code>,
+                pre: ({ children }) => <pre className="mb-6 overflow-x-auto rounded-xl bg-muted p-4 [&_code]:bg-transparent [&_code]:p-0">{children}</pre>,
+                // the alias after | becomes a small caption under the screenshot
+                img: ({ src, alt }) => (
+                  <span className="my-8 block">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={typeof src === "string" ? src : undefined} alt={alt ?? ""} loading="lazy" className="block w-full rounded-xl ring-1 ring-border" />
+                    {alt && <span className="mt-2 block text-center font-mono text-[11px] text-muted-foreground">{alt}</span>}
+                  </span>
+                ),
+                strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
+                a: ({ href, children }) => (
+                  <Ref href={href} className={`inline ${inlineLink}`}>
+                    {children}
+                  </Ref>
+                ),
+              }}
+            >
+              {body}
+            </ReactMarkdown>
+          </article>
+        )}
+
+        {/* the logo signs off the post, bottom right */}
+        {logo && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={logo} alt="" width={72} height={72} className="-mt-16 ml-auto block h-[72px] w-[72px] rotate-6 drop-shadow-lg" />
+        )}
+
+        <SiteFooter />
+      </main>
     </div>
   )
 }

@@ -16,6 +16,7 @@ export type CaseStudyMeta = {
   link?: string
   repo?: string
   cover?: string
+  logo?: string // a file in content/attachments, signs off the page bottom right
   draft?: boolean
 }
 
@@ -33,13 +34,15 @@ function parse(slug: string): CaseStudy {
   return {
     slug,
     title: data.title ?? slug,
-    summary: data.summary,
+    // juega-style pages call it description
+    summary: data.summary ?? data.description ?? undefined,
     date: toDateString(data.date),
     role: data.role,
     stack: Array.isArray(data.stack) ? data.stack : undefined,
     link: typeof data.link === "string" ? data.link.trim() || undefined : undefined,
     repo: typeof data.repo === "string" ? data.repo.trim() || undefined : undefined,
     cover: data.cover,
+    logo: typeof data.logo === "string" ? data.logo.trim() || undefined : undefined,
     draft: data.draft === true,
     content,
   }

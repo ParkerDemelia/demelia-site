@@ -6,7 +6,7 @@ software engineer, content creator, and professional side-quester. usually using
 - [journe](/journe)
 - [gear](/gear)
 - [expenses](/expenses)
-- [learn spanish](/juegaespanol)
+- [learn spanish](/work/juegaespanol)
 
 ## Selected Work
 
