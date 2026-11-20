@@ -16,6 +16,7 @@ export type CaseStudyMeta = {
   link?: string
   repo?: string
   cover?: string
+  logo?: string // a file in content/attachments, signs off the page bottom right
   draft?: boolean
 }
 
@@ -33,13 +34,15 @@ function parse(slug: string): CaseStudy {
   return {
     slug,
     title: data.title ?? slug,
-    summary: data.summary,
+    // juega-style pages call it description
+    summary: data.summary ?? data.description ?? undefined,
     date: toDateString(data.date),
     role: data.role,
     stack: Array.isArray(data.stack) ? data.stack : undefined,
-    link: data.link,
-    repo: data.repo,
+    link: typeof data.link === "string" ? data.link.trim() || undefined : undefined,
+    repo: typeof data.repo === "string" ? data.repo.trim() || undefined : undefined,
     cover: data.cover,
+    logo: typeof data.logo === "string" ? data.logo.trim() || undefined : undefined,
     draft: data.draft === true,
     content,
   }
@@ -64,4 +67,19 @@ export function getCaseStudy(slug: string): CaseStudy | null {
   if (!getCaseStudySlugs().includes(slug)) return null
   const study = parse(slug)
   return study.draft ? null : study
+}
+
+// Which case study belongs to a work.md entry: same website, else same name ("¡JuegaEspanol!" = "JuegaEspanol!").
+const host = (url?: string) => {
+  try {
+    return url ? new URL(url).hostname.replace(/^www\./, "") : undefined
+  } catch {
+    return undefined
+  }
+}
+const key = (s: string) => s.normalize("NFD").replace(/[^a-z0-9]/gi, "").toLowerCase()
+
+export function findCaseStudy<T extends CaseStudyMeta>(item: { name: string; link?: string }, studies: T[]): T | undefined {
+  const h = host(item.link)
+  return studies.find((s) => h && host(s.link) === h) ?? studies.find((s) => key(s.title) === key(item.name))
 }

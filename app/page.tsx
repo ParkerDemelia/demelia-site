@@ -1,30 +1,34 @@
-import { existsSync } from "fs"
-import { join } from "path"
+import Link from "next/link"
 import ReactMarkdown from "react-markdown"
 import { ArrowRight } from "lucide-react"
 import { getWorkList } from "@/lib/resume"
 import { getAbout } from "@/lib/about"
 import { getPosts } from "@/lib/posts"
+import { getHits } from "@/lib/hits"
+import { screenshot } from "@/lib/screenshot"
 import { Ref, SectionLabel, inlineLink } from "@/components/ref"
 import { WorkList } from "@/components/work-list"
+import { HitsCarousel } from "@/components/hits-carousel"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 
-// Hover previews: public/work/<slug>.webp, where "Mission Monte Líbano" → mission-monte-libano
-function screenshot(name: string) {
-  const slug = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
-  return existsSync(join(process.cwd(), "public", "work", `${slug}.webp`)) ? `/work/${slug}.webp` : undefined
-}
+const pill = "inline-flex items-center gap-2 rounded-full border border-border px-4 py-1.5 transition-colors hover:border-foreground/30 hover:bg-muted"
 
 // The latest-post line can be a Substack post — refresh hourly.
 export const revalidate = 3600
 
-// Home is the professional side: who I am + client sites. Writing lives on /blog, everything else on /explore.
-// Bio: content/about.md (text before the first ##) · Work: the "Client Work" section of content/work.md
+// Home is the whole picture: who I am, a row of pills (latest post, trip pages, juegaespanol), a few client sites, best-of videos, socials.
+// The full list of work lives on /work (that's where the business card points). Writing lives on /blog.
+// Bio + pills + which work is selected: content/about.md · Work + socials: content/work.md · Videos: content/hits.md
 export default async function HomePage() {
-  const { bio, links } = getAbout()
+  const { bio, links, selected } = getAbout()
   const sections = getWorkList()
   const client = sections.find((s) => /client/i.test(s.title)) ?? sections[0]
+  const social = sections.find((s) => /social/i.test(s.title))
+  const picks = selected.length
+    ? selected.flatMap((name) => client?.items.find((t) => t.name.toLowerCase() === name.toLowerCase()) ?? [])
+    : (client?.items.slice(0, 3) ?? [])
+  const hits = getHits()
   // only hit the feed when "- {newestblog}" is in the Links list
   const [latest] = links.some((l) => l.kind === "newestblog") ? await getPosts() : []
 
@@ -52,32 +56,63 @@ export default async function HomePage() {
           </ReactMarkdown>
         </section>
 
-        {/* Featured links: the "## Links" list in content/about.md, in order ({newestblog} = latest post) */}
-        <div className="mb-20 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
+        {/* One row of pills: the "## Links" list in content/about.md, in order ({newestblog} = latest post) */}
+        <nav aria-label="Featured" className="mb-20 flex flex-wrap gap-2 text-sm">
           {links.map((l) =>
             l.kind === "newestblog" ? (
               latest && (
-                <Ref key="newestblog" href={latest.href} className="group inline-flex items-center gap-2 hover:text-foreground transition-colors">
-                  <span className="font-mono text-[11px] uppercase tracking-[0.2em]">Latest</span>
+                <Ref key="newestblog" href={latest.href} className={`group ${pill}`}>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Latest</span>
                   <span className="text-foreground group-hover:text-primary transition-colors">{latest.title}</span>
-                  <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                  <ArrowRight className="h-3.5 w-3.5 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
                 </Ref>
               )
             ) : (
-              <Ref key={l.href} href={l.href} className="group inline-flex items-center gap-1.5 text-foreground hover:text-primary transition-colors">
-                {l.label}
-                <ArrowRight className="h-3.5 w-3.5 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
+              <Ref key={l.href} href={l.href} className={`group ${pill}`}>
+                <span className="text-foreground group-hover:text-primary transition-colors">{l.label}</span>
               </Ref>
             ),
           )}
-        </div>
+        </nav>
 
-        {client && (
-          <section>
-            <SectionLabel>Selected work</SectionLabel>
-            <WorkList items={client.items.map((t) => ({ ...t, image: screenshot(t.name) }))} />
-          </section>
-        )}
+        <div className="space-y-16">
+          {picks.length > 0 && (
+            <section>
+              <SectionLabel>Selected work</SectionLabel>
+              <WorkList items={picks.map((t) => ({ ...t, image: screenshot(t.name) }))} />
+              <Link href="/work" className="group mt-5 inline-flex items-center gap-1.5 text-sm text-foreground hover:text-primary transition-colors">
+                All work
+                <ArrowRight className="h-3.5 w-3.5 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
+              </Link>
+            </section>
+          )}
+
+          {hits.hits.length > 0 && (
+            <section>
+              <SectionLabel>{hits.title}</SectionLabel>
+              <HitsCarousel hits={hits.hits} />
+            </section>
+          )}
+
+          {social && social.items.length > 0 && (
+            <section>
+              <SectionLabel>{social.title}</SectionLabel>
+              <ul className="grid gap-3 sm:grid-cols-2">
+                {social.items.map((c) => (
+                  <li key={c.name}>
+                    <Ref href={c.link} className="group flex h-full items-start justify-between gap-3 rounded-xl border border-border p-4 transition-colors hover:border-foreground/30">
+                      <span>
+                        <span className="block font-medium text-foreground group-hover:text-primary transition-colors">{c.name}</span>
+                        {c.desc && <span className="mt-1 block text-sm text-muted-foreground">{c.desc}</span>}
+                      </span>
+                      <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground group-hover:text-primary" />
+                    </Ref>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+        </div>
 
         <SiteFooter />
       </main>

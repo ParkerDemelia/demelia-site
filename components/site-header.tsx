@@ -3,12 +3,12 @@ import { ArrowLeft } from "lucide-react"
 
 const NAV = [
   { label: "blog", href: "/blog" },
-  { label: "explore", href: "/explore" },
+  { label: "work", href: "/work" },
 ]
 
 // Wordmark on the left is the logo; the two sections sit top right.
-// A page inside a section passes `back` (e.g. "/explore") and gets a back arrow there instead of the wordmark.
-export function SiteHeader({ active, back }: { active?: "blog" | "explore"; back?: string }) {
+// A page inside a section passes `back` (e.g. "/") and gets a back arrow there instead of the wordmark.
+export function SiteHeader({ active, back }: { active?: "blog" | "work"; back?: string }) {
   return (
     <header className="mb-16 flex items-baseline justify-between gap-4">
       {back ? (

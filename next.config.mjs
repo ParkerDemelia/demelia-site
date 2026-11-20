@@ -9,6 +9,13 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // /explore was folded into the home page; /juegaespanol is now a case study under /work
+  async redirects() {
+    return [
+      { source: "/explore", destination: "/", permanent: true },
+      { source: "/juegaespanol", destination: "/work/juegaespanol", permanent: true },
+    ]
+  },
   experimental: {
     // vault media is read from content/ at runtime by app/vault/[...path]/route.ts
     outputFileTracingIncludes: {

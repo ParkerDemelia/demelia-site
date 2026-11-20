@@ -4,13 +4,15 @@ import matter from "gray-matter"
 
 // The home page reads content/about.md:
 //   text before the first "## " heading → the bio
-//   ## Links                           → featured links under the bio, in order:
+//   ## Links                           → the row of pills under the bio, in order:
 //                                          "- [label](/path)"  a link
 //                                          "- {newestblog}"    your newest blog post (delete the line to hide it)
+//   ## Selected Work                   → which client sites show on home, by name as written in content/work.md
+//                                          (the full list lives on /work)
 const ABOUT_PATH = join(process.cwd(), "content", "about.md")
 
 export type FeaturedLink = { kind: "link"; label: string; href: string } | { kind: "newestblog" }
-export type About = { bio: string; links: FeaturedLink[] }
+export type About = { bio: string; links: FeaturedLink[]; selected: string[] }
 
 const LINK = /\[([^\]]+)\]\(([^)\s]+)\)/
 
@@ -42,5 +44,6 @@ export function getAbout(): About {
       const m = l.match(LINK)
       return m ? [{ kind: "link", label: m[1], href: m[2] }] : []
     }),
+    selected: listItems(sections["selected work"]).map((l) => l.match(LINK)?.[1] ?? l),
   }
 }

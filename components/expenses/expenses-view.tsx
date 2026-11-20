@@ -249,7 +249,7 @@ export function ExpensesView({ nights }: { nights: Record<string, number> }) {
     <div className="min-h-screen bg-background">
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="pt-4 sm:pt-8">
-          <SiteHeader active="explore" back="/explore" />
+          <SiteHeader back="/" />
         </div>
         <div className="-mt-8 pb-6 text-center space-y-3">
           <h1 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">
