@@ -4,6 +4,7 @@ description: how i track my budget while traveling
 link:
 logo:
 tagline:
+draft: true
 ---
  >i find that things work best with as little friction as possible. 
 
@@ -38,4 +39,4 @@ Our **Teach** platform builds a classroom management layer overtop of Learn, ena
 ![[juegaespanol-teach.webp|the Teach side: one dashboard for the whole class]]
 
 
-
+![[expense-dashboard.png| expenses sorted by country and catagory]]

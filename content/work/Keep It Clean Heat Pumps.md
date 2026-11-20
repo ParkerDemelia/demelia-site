@@ -11,10 +11,6 @@ link: |
   https://keepitcleanhp.com
 repo:
 cover: /work/example/cover.png
-draft: false
+draft: true
 ---
-## Problem
-
-## Approach
-
-## Outcome
+I met Cole Ellis in my first Week at Thomas College when

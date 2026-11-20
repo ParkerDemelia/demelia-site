@@ -10,7 +10,7 @@ stack:
 link: https://example.com
 repo: https://github.com/parkerdemelia/example
 cover: /work/example/cover.png
-draft: false
+draft: true
 ---
 
 Copy this file to content/work/<slug>.md — the filename becomes the URL (/work/<slug>).
