@@ -16,6 +16,17 @@ const nextConfig = {
       { source: "/juegaespanol", destination: "/work/juegaespanol", permanent: true },
     ]
   },
+  // audio.parkerdemelia.com serves /audio (add the domain to this Vercel project to turn it on)
+  async rewrites() {
+    const host = [{ type: "host", value: "audio.parkerdemelia.com" }]
+    return {
+      beforeFiles: [
+        { source: "/", has: host, destination: "/audio" },
+        { source: "/feed.xml", has: host, destination: "/audio/feed.xml" },
+        { source: "/upload", has: host, destination: "/audio/upload" },
+      ],
+    }
+  },
   experimental: {
     // vault media is read from content/ at runtime by app/vault/[...path]/route.ts
     outputFileTracingIncludes: {
